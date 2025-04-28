@@ -6,16 +6,16 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { useToast } from '../ui/use-toast';
-import { RootState } from '../../store';
+import { useToast } from '@/hooks/use-toast';
+import { AppDispatch, RootState } from '../../store';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading } = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +28,11 @@ export function LoginForm() {
         description: 'Bienvenido de nuevo',
       });
       navigate('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error || 'Error al iniciar sesión',
+        description: error instanceof Error ? error.message : 'Error al iniciar sesión',
       });
     }
   };

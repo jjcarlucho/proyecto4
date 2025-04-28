@@ -6,8 +6,8 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { useToast } from '../ui/use-toast';
-import { RootState } from '../../store';
+import { useToast } from '@/hooks/use-toast';
+import { AppDispatch, RootState } from '../../store';
 
 export function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -16,10 +16,10 @@ export function RegisterForm() {
     password: '',
     confirmPassword: ''
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading } = useSelector((state: RootState) => state.auth);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -53,11 +53,11 @@ export function RegisterForm() {
         description: 'Tu cuenta ha sido creada',
       });
       navigate('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error || 'Error al registrar usuario',
+        description: error instanceof Error ? error.message : 'Error al registrar usuario',
       });
     }
   };
