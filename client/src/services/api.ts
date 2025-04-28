@@ -1,16 +1,17 @@
 import axios from 'axios';
+import { store } from '../store';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor for adding auth token
+// Interceptor para agregar el token a las peticiones
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = store.getState().auth.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -21,21 +22,15 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for handling errors
+// Interceptor para manejar errores de respuesta
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    // Handle 401 Unauthorized errors
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      // Clear token and redirect to login
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expirado o inválido
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
-
     return Promise.reject(error);
   }
 );
