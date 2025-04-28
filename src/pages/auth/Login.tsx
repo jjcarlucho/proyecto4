@@ -86,6 +86,9 @@ const Login: React.FC = () => {
           Iniciar sesión con Google
         </button>
       </form>
+      <div className="mt-4 text-center">
+        <a href="/forgot-password" className="text-blue-600 hover:underline text-sm">¿Olvidaste tu contraseña?</a>
+      </div>
     </div>
   );
 };
