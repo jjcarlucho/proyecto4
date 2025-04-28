@@ -1,58 +1,34 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { config } from './config';
-import { errorHandler } from './middleware/errorHandler';
-import { logger } from './utils/logger';
+import authRoutes from './routes/authRoutes';
 
-// Initialize express app
+// Configuración de variables de entorno
+dotenv.config();
+
 const app = express();
 
 // Middleware
-app.use(helmet());
-app.use(cors({
-  origin: config.frontendUrl,
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: config.rateLimitWindowMs,
-  max: config.rateLimitMax
+// Rutas
+app.use('/api/auth', authRoutes);
+
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.json({ message: 'API de AutoDiagnose funcionando' });
 });
-app.use(limiter);
 
-// Routes
-// TODO: Import and use route handlers
-// app.use('/api/auth', authRoutes);
-// app.use('/api/diagnostics', diagnosticRoutes);
-// app.use('/api/subscriptions', subscriptionRoutes);
-// app.use('/api/admin', adminRoutes);
+// Conexión a MongoDB
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/autodiagnose';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch((error) => console.error('Error conectando a MongoDB:', error));
 
-// Error handling
-app.use(errorHandler);
-
-// Connect to MongoDB
-mongoose.connect(config.mongoUri)
-  .then(() => {
-    logger.info('Connected to MongoDB');
-    
-    // Start server
-    app.listen(config.port, () => {
-      logger.info(`Server running on port ${config.port}`);
-    });
-  })
-  .catch((error) => {
-    logger.error('MongoDB connection error:', error);
-    process.exit(1);
-  });
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (error: Error) => {
-  logger.error('Unhandled promise rejection:', error);
-  process.exit(1);
+// Puerto
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 }); 
