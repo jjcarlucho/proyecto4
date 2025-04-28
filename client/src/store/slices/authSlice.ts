@@ -5,25 +5,13 @@ interface User {
   id: string;
   email: string;
   name: string;
-  shopName: string;
-  role: 'user' | 'admin' | 'super_admin';
-  plan: 'starter' | 'professional' | 'enterprise';
-  subscription: {
-    status: 'active' | 'cancelled' | 'expired' | 'trial';
-    currentPeriodStart?: Date;
-    currentPeriodEnd?: Date;
-    trialEnd?: Date;
-  };
-  settings: {
-    notifications: boolean;
-    darkMode: boolean;
-    language: string;
-  };
+  role: 'user' | 'admin';
 }
 
 interface AuthState {
   user: User | null;
   token: string | null;
+  isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -31,73 +19,55 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem('token'),
+  isAuthenticated: false,
   loading: false,
-  error: null,
+  error: null
 };
 
 // Async thunks
+export const register = createAsyncThunk(
+  'auth/register',
+  async (userData: { email: string; password: string; name: string }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+      localStorage.setItem('token', response.data.token);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Error en el registro');
+    }
+  }
+);
+
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/auth/login', credentials);
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      return { token, user };
+      const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+      localStorage.setItem('token', response.data.token);
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+      return rejectWithValue(error.response?.data?.message || 'Error en el inicio de sesión');
     }
   }
 );
-
-export const register = createAsyncThunk(
-  'auth/register',
-  async (userData: {
-    email: string;
-    password: string;
-    name: string;
-    shopName: string;
-    plan: 'starter' | 'professional' | 'enterprise';
-  }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/auth/register', userData);
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      return { token, user };
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Registration failed');
-    }
-  }
-);
-
-export const logout = createAsyncThunk('auth/logout', async () => {
-  localStorage.removeItem('token');
-});
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    clearError: (state) => {
+    logout: (state) => {
+      localStorage.removeItem('token');
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
       state.error = null;
     },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
-      // Login
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
       // Register
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -105,6 +75,7 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
+        state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
       })
@@ -112,13 +83,23 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Logout
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null;
-        state.token = null;
+      // Login
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
-  },
+  }
 });
 
-export const { clearError } = authSlice.actions;
+export const { logout, clearError } = authSlice.actions;
 export default authSlice.reducer; 
