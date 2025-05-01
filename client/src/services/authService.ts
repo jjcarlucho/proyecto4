@@ -1,4 +1,10 @@
-import axios from 'axios';
+import { 
+  signInWithPopup,
+  signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
+  createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword,
+  signOut as firebaseSignOut
+} from 'firebase/auth';
+import { auth, googleProvider } from '../config/firebase';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
@@ -27,7 +33,37 @@ export const resetPassword = async (token: string, password: string) => {
 };
 
 // Iniciar sesión con Google
-export const loginWithGoogle = async (tokenId: string) => {
-  const response = await axios.post(`${API_URL}/auth/google`, { tokenId });
-  return response.data;
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const loginWithEmailAndPassword = async (email: string, password: string) => {
+  try {
+    const result = await firebaseSignInWithEmailAndPassword(auth, email, password);
+    return result.user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const registerWithEmailAndPassword = async (email: string, password: string) => {
+  try {
+    const result = await firebaseCreateUserWithEmailAndPassword(auth, email, password);
+    return result.user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const logout = async () => {
+  try {
+    await firebaseSignOut(auth);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };

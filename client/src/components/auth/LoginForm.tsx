@@ -16,7 +16,7 @@ export function LoginForm() {
     e.preventDefault();
     try {
       await loginWithEmailAndPassword(email, password);
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (error: any) {
       setError(error.message);
     }
@@ -25,7 +25,7 @@ export function LoginForm() {
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (error: any) {
       setError(error.message);
     }
