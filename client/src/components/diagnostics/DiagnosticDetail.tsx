@@ -6,7 +6,6 @@ import { AppDispatch, RootState } from '../../store';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { Separator } from '../ui/separator';
 
 const DiagnosticDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

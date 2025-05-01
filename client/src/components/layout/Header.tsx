@@ -16,6 +16,18 @@ import {
 } from '../ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 
+interface NavItem {
+  name: string;
+  path: string;
+  icon?: React.ReactNode;
+}
+
+const navigation: NavItem[] = [
+  { name: 'Inicio', path: '/' },
+  { name: 'Diagnósticos', path: '/diagnostics' },
+  { name: 'Vehículos', path: '/vehicles' },
+];
+
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

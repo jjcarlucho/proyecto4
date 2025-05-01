@@ -21,7 +21,6 @@ const DemoPage: React.FC = () => {
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<null | boolean>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +31,6 @@ const DemoPage: React.FC = () => {
       // Simulamos el diagnóstico
       setTimeout(() => {
         setLoading(false);
-        setResults(true);
         setStep(3);
       }, 3000);
     }

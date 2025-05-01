@@ -68,6 +68,21 @@ const diagnosticSlice = createSlice({
   name: 'diagnostics',
   initialState,
   reducers: {
+    setDiagnostics: (state, action: PayloadAction<DiagnosticWithVehicle[]>) => {
+      state.diagnostics = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setCurrentDiagnostic: (state, action: PayloadAction<DiagnosticWithVehicle | null>) => {
+      state.currentDiagnostic = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
     clearCurrentDiagnostic: (state) => {
       state.currentDiagnostic = null;
     },
@@ -135,5 +150,13 @@ const diagnosticSlice = createSlice({
   }
 });
 
-export const { clearCurrentDiagnostic, clearError } = diagnosticSlice.actions;
+export const {
+  setDiagnostics,
+  setCurrentDiagnostic,
+  setLoading,
+  setError,
+  clearCurrentDiagnostic,
+  clearError
+} = diagnosticSlice.actions;
+
 export default diagnosticSlice.reducer;

@@ -5,12 +5,20 @@ export interface DiagnosticIssue {
   system: string;
 }
 
+export interface Vehicle {
+  _id: string;
+  make: string;
+  model: string;
+  year: number;
+  vin: string;
+}
+
 export interface Diagnostic {
   _id: string;
   vehicleId: string;
   userId: string;
   date: string;
-  status: 'pending' | 'completed' | 'failed';
+  status: 'pending' | 'in_progress' | 'completed';
   issues: DiagnosticIssue[];
   recommendedActions: string[];
   summary: string;
@@ -19,14 +27,8 @@ export interface Diagnostic {
   updatedAt: string;
 }
 
-export interface DiagnosticWithVehicle extends Diagnostic {
-  vehicleId: {
-    _id: string;
-    make: string;
-    model: string;
-    year: number;
-    vin: string;
-  };
+export interface DiagnosticWithVehicle extends Omit<Diagnostic, 'vehicleId'> {
+  vehicleId: Vehicle;
 }
 
 export interface StartDiagnosticRequest {
