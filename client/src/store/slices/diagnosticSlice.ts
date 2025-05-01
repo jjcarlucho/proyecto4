@@ -124,10 +124,8 @@ const diagnosticSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(startNewDiagnostic.fulfilled, (state, action: PayloadAction<StartDiagnosticResponse>) => {
+    builder.addCase(startNewDiagnostic.fulfilled, (state) => {
       state.loading = false;
-      // We don't add the diagnostic to the list here because it starts as pending
-      // It will be added when we fetch diagnostics again
     });
     builder.addCase(startNewDiagnostic.rejected, (state, action) => {
       state.loading = false;

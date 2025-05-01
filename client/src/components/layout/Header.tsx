@@ -22,12 +22,6 @@ interface NavItem {
   icon?: React.ReactNode;
 }
 
-const navigation: NavItem[] = [
-  { name: 'Inicio', path: '/' },
-  { name: 'Diagnósticos', path: '/diagnostics' },
-  { name: 'Vehículos', path: '/vehicles' },
-];
-
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -74,7 +68,7 @@ const Header: React.FC = () => {
   };
   
   // Links para usuarios no autenticados
-  const publicLinks = [
+  const publicLinks: NavItem[] = [
     { name: 'Inicio', path: '/' },
     { name: 'Funcionalidades', path: '/features' },
     { name: 'Precios', path: '/pricing' },
@@ -82,7 +76,7 @@ const Header: React.FC = () => {
   ];
   
   // Links para usuarios autenticados
-  const privateLinks = [
+  const privateLinks: NavItem[] = [
     { name: 'Dashboard', path: '/dashboard', icon: <Gauge className="mr-2 h-4 w-4" /> },
     { name: 'Vehículos', path: '/dashboard/vehicles', icon: <Car className="mr-2 h-4 w-4" /> },
     { name: 'Diagnósticos', path: '/dashboard/diagnostics', icon: <FileSpreadsheet className="mr-2 h-4 w-4" /> },
@@ -118,7 +112,7 @@ const Header: React.FC = () => {
                   : 'text-gray-600 hover:text-primary-800'
               }`}
             >
-              {link.icon && link.icon}
+              {link.icon}
               {link.name}
             </Link>
           ))}
@@ -203,7 +197,7 @@ const Header: React.FC = () => {
               }`}
               onClick={closeMenu}
             >
-              {link.icon && link.icon}
+              {link.icon}
               {link.name}
             </Link>
           ))}

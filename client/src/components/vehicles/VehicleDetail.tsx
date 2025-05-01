@@ -10,7 +10,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from '../ui/badge';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { Vehicle } from '../../types/vehicle';
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
