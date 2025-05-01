@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Diagnostic, DiagnosticWithVehicle, StartDiagnosticRequest, StartDiagnosticResponse } from '../../types/diagnostic';
+import { Diagnostic, DiagnosticWithVehicle, StartDiagnosticRequest } from '../../types/diagnostic';
 import * as diagnosticService from '../../services/diagnosticService';
 
 interface DiagnosticState {
