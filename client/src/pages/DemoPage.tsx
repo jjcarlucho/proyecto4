@@ -1,244 +1,295 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+
+const carMakes = [
+  'Toyota', 'Honda', 'Ford', 'Chevrolet', 'Volkswagen', 'BMW', 'Mercedes-Benz',
+  'Audi', 'Nissan', 'Hyundai', 'Kia', 'Subaru', 'Mazda', 'Lexus', 'Tesla'
+];
 
 const DemoPage: React.FC = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [shopName, setShopName] = useState('');
-  const [shopSize, setShopSize] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  
   useEffect(() => {
-    document.title = 'Request Demo - AutoDiagnose AI';
+    document.title = 'Demo - AutoDiagnose AI';
   }, []);
+
+  const [step, setStep] = useState(1);
+  const [make, setMake] = useState('');
+  const [model, setModel] = useState('');
+  const [year, setYear] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<null | boolean>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted with:', { firstName, lastName, email, phone, shopName, shopSize });
-    setSubmitted(true);
+    if (step === 1) {
+      setStep(2);
+    } else if (step === 2) {
+      setLoading(true);
+      // Simulamos el diagnóstico
+      setTimeout(() => {
+        setLoading(false);
+        setResults(true);
+        setStep(3);
+      }, 3000);
+    }
   };
 
-  if (submitted) {
-    return (
-      <div className="min-h-screen pt-24 flex items-center">
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md text-center">
-            <div className="mb-6 flex justify-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-10 h-10 text-green-600" />
-              </div>
-            </div>
-            <h2 className="font-heading text-2xl font-bold mb-4 text-gray-900">
-              Thank You for Your Interest!
-            </h2>
-            <p className="text-gray-600 mb-8">
-              We've received your request for a demo of AutoDiagnose AI. One of our team members will contact you within 24 hours to schedule your personalized demonstration.
+  return (
+    <div className="pt-16 pb-20">
+      <div className="bg-blue-700 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
+              Demo Interactiva
+            </h1>
+            <p className="mt-5 max-w-xl mx-auto text-xl text-blue-100">
+              Experimenta cómo funciona AutoDiagnose AI con esta demostración interactiva.
             </p>
-            <div className="bg-gray-50 p-4 rounded-lg mb-8">
-              <h3 className="font-medium text-gray-800 mb-2">What to Expect Next:</h3>
-              <ol className="text-left text-gray-600 space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="font-bold min-w-[20px]">1.</span>
-                  <span>Email confirmation (check your inbox)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold min-w-[20px]">2.</span>
-                  <span>Call from our account executive</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold min-w-[20px]">3.</span>
-                  <span>Scheduled live demonstration</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold min-w-[20px]">4.</span>
-                  <span>Q&A session and next steps</span>
-                </li>
-              </ol>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Link to="/" className="btn btn-primary">
-                Return to Home
-              </Link>
-              <Link to="/features" className="text-primary-800 hover:text-primary-700 font-medium">
-                Explore More Features
-              </Link>
-            </div>
           </div>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="pt-24">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <span className="inline-block px-4 py-2 bg-blue-100 text-primary-800 rounded-full font-medium text-sm mb-4">Free Demo</span>
-              <h1 className="heading-lg text-gray-900 mb-6">
-                Experience the Power of AutoDiagnose AI
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Schedule a personalized demo to see how our AI-powered diagnostic platform can transform your repair shop operations.
-              </p>
-              
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <h3 className="font-heading font-bold text-xl mb-4 text-gray-800">
-                  What You'll See in the Demo:
-                </h3>
-                <ul className="space-y-3">
-                  {[
-                    'Live vehicle diagnostic process',
-                    'Repair recommendation engine',
-                    'Customer reporting features',
-                    'ROI calculator for your shop',
-                    'Integration with your existing tools',
-                    'Admin dashboard and analytics'
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="mb-12">
+          <div className="flex items-center justify-between max-w-2xl mx-auto">
+            <div className="flex items-center">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                step >= 1 ? 'bg-blue-600' : 'bg-gray-300'
+              } text-white`}>
+                1
               </div>
-              
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="font-heading font-bold text-xl mb-4 text-gray-800">
-                  What Our Customers Say
-                </h3>
-                <blockquote className="border-l-4 border-primary-800 pl-4 mb-4">
-                  <p className="text-gray-700 italic">
-                    "The demo alone showed us how much time we could save. Within a week of implementing AutoDiagnose AI, we saw a 28% increase in diagnostic accuracy."
-                  </p>
-                  <footer className="text-gray-600 mt-2">- Michael Reynolds, Owner of Reynolds Auto Repair</footer>
-                </blockquote>
+              <div className={`ml-2 ${step >= 1 ? 'text-blue-600' : 'text-gray-500'} font-medium`}>
+                Vehículo
               </div>
             </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-8">
-              <h2 className="font-heading text-2xl font-bold mb-6 text-gray-800">
-                Request Your Free Demo
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                      First Name*
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                      Last Name*
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Email*
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number*
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="shopName" className="block text-sm font-medium text-gray-700 mb-1">
-                    Shop Name*
-                  </label>
-                  <input
-                    type="text"
-                    id="shopName"
-                    value={shopName}
-                    onChange={(e) => setShopName(e.target.value)}
-                    className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="shopSize" className="block text-sm font-medium text-gray-700 mb-1">
-                    Shop Size*
-                  </label>
-                  <select
-                    id="shopSize"
-                    value={shopSize}
-                    onChange={(e) => setShopSize(e.target.value)}
-                    className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-primary-800 focus:border-primary-800"
-                    required
-                  >
-                    <option value="">Select shop size</option>
-                    <option value="1-3">1-3 technicians</option>
-                    <option value="4-10">4-10 technicians</option>
-                    <option value="11-20">11-20 technicians</option>
-                    <option value="21+">21+ technicians</option>
-                  </select>
-                </div>
-                
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-full"
-                  >
-                    Schedule My Demo
-                  </button>
-                  <p className="text-sm text-gray-500 mt-3 text-center">
-                    By submitting this form, you agree to our{' '}
-                    <Link to="/terms" className="text-primary-800 hover:underline">
-                      Terms of Service
-                    </Link>{' '}
-                    and{' '}
-                    <Link to="/privacy" className="text-primary-800 hover:underline">
-                      Privacy Policy
-                    </Link>
-                    .
-                  </p>
-                </div>
-              </form>
+            <div className={`flex-1 h-1 mx-4 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+            <div className="flex items-center">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                step >= 2 ? 'bg-blue-600' : 'bg-gray-300'
+              } text-white`}>
+                2
+              </div>
+              <div className={`ml-2 ${step >= 2 ? 'text-blue-600' : 'text-gray-500'} font-medium`}>
+                Diagnóstico
+              </div>
+            </div>
+            <div className={`flex-1 h-1 mx-4 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+            <div className="flex items-center">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                step >= 3 ? 'bg-blue-600' : 'bg-gray-300'
+              } text-white`}>
+                3
+              </div>
+              <div className={`ml-2 ${step >= 3 ? 'text-blue-600' : 'text-gray-500'} font-medium`}>
+                Resultados
+              </div>
             </div>
           </div>
         </div>
+
+        {step === 1 && (
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle>Información del Vehículo</CardTitle>
+              <CardDescription>
+                Introduce los datos de tu vehículo para comenzar el diagnóstico.
+              </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="make">Marca</Label>
+                  <Select value={make} onValueChange={setMake} required>
+                    <SelectTrigger id="make">
+                      <SelectValue placeholder="Selecciona una marca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {carMakes.map((carMake) => (
+                        <SelectItem key={carMake} value={carMake}>{carMake}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="model">Modelo</Label>
+                  <Input 
+                    id="model" 
+                    placeholder="Ej. Corolla" 
+                    value={model} 
+                    onChange={(e) => setModel(e.target.value)} 
+                    required 
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="year">Año</Label>
+                  <Input 
+                    id="year" 
+                    placeholder="Ej. 2020" 
+                    type="number" 
+                    min="1900" 
+                    max={new Date().getFullYear()} 
+                    value={year} 
+                    onChange={(e) => setYear(e.target.value)} 
+                    required 
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full">Continuar</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        )}
+
+        {step === 2 && (
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle>Iniciar Diagnóstico</CardTitle>
+              <CardDescription>
+                Conecta tu vehículo para comenzar el diagnóstico inteligente.
+              </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+              <CardContent>
+                <div className="text-center py-6">
+                  <div className="mb-6">
+                    <div className="inline-block p-4 rounded-full bg-blue-100">
+                      <svg className="h-16 w-16 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-medium text-gray-900 mb-2">
+                    Vehículo: {make} {model} ({year})
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Para un diagnóstico real, conectarías un dispositivo al puerto OBD-II de tu vehículo. Para esta demo, simplemente haz clic en "Iniciar Diagnóstico".
+                  </p>
+                  <div className="space-y-4 max-w-sm mx-auto">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Conexión</span>
+                      <span className="text-sm font-medium text-green-600">Listo</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Datos del vehículo</span>
+                      <span className="text-sm font-medium text-green-600">Verificado</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Sistema de diagnóstico</span>
+                      <span className="text-sm font-medium text-green-600">Preparado</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Analizando...
+                    </>
+                  ) : 'Iniciar Diagnóstico'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        )}
+
+        {step === 3 && (
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle>Resultados del Diagnóstico</CardTitle>
+              <CardDescription>
+                Análisis completo para {make} {model} ({year})
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-medium">Estado General</h3>
+                  <div className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    Atención requerida
+                  </div>
+                </div>
+                <p className="text-gray-500 mb-4">
+                  Se han detectado algunos problemas que requieren atención para mantener tu vehículo en óptimas condiciones.
+                </p>
+                <div className="h-2 bg-gray-200 rounded-full">
+                  <div className="h-2 bg-yellow-500 rounded-full" style={{ width: '65%' }}></div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-medium">Sistema de encendido</h4>
+                      <p className="text-sm text-gray-500">Bujías desgastadas</p>
+                    </div>
+                    <div className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                      Alta
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Las bujías muestran signos de desgaste significativo. Recomendamos su reemplazo para evitar problemas de arranque y rendimiento deficiente.
+                  </p>
+                </div>
+
+                <div className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-medium">Sistema de emisiones</h4>
+                      <p className="text-sm text-gray-500">Eficiencia del catalizador reducida</p>
+                    </div>
+                    <div className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      Media
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    El catalizador muestra una eficiencia por debajo del umbral óptimo. Recomendamos una inspección para determinar si necesita limpieza o reemplazo.
+                  </p>
+                </div>
+
+                <div className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-medium">Frenos</h4>
+                      <p className="text-sm text-gray-500">Desgaste de pastillas</p>
+                    </div>
+                    <div className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      Baja
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Las pastillas de freno delanteras muestran desgaste normal pero se acercan al punto de reemplazo recomendado. Considere su cambio en los próximos 5,000 km.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <p className="text-sm text-gray-500 mb-2">
+                En un diagnóstico completo, recibirías recomendaciones detalladas, costos estimados y podrías programar servicios directamente desde la aplicación.
+              </p>
+              <div className="flex space-x-4 w-full">
+                <Button variant="outline" className="flex-1" onClick={() => setStep(1)}>
+                  Reiniciar Demo
+                </Button>
+                <Link to="/register" className="flex-1">
+                  <Button className="w-full">Registrarse Ahora</Button>
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+        )}
       </div>
     </div>
   );

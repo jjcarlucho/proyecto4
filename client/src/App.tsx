@@ -7,9 +7,19 @@ import PricingPage from './pages/PricingPage';
 import DemoPage from './pages/DemoPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
-import { DashboardPage } from './pages/DashboardPage';
+import Dashboard from './pages/Dashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from './components/ui/toaster';
+
+// Importar componentes de vehículos
+import VehicleList from './components/vehicles/VehicleList';
+import VehicleForm from './components/vehicles/VehicleForm';
+import VehicleDetail from './components/vehicles/VehicleDetail';
+
+// Importar componentes de diagnósticos
+import DiagnosticList from './components/diagnostics/DiagnosticList';
+import DiagnosticDetail from './components/diagnostics/DiagnosticDetail';
+import StartDiagnostic from './components/diagnostics/StartDiagnostic';
 
 function App() {
   return (
@@ -18,21 +28,30 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
+            {/* Rutas públicas */}
             <Route path="/" element={<HomePage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/demo" element={<DemoPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            
+            {/* Rutas protegidas */}
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            
+            {/* Rutas de vehículos */}
+            <Route path="/dashboard/vehicles" element={<ProtectedRoute><VehicleList /></ProtectedRoute>} />
+            <Route path="/dashboard/vehicles/new" element={<ProtectedRoute><VehicleForm /></ProtectedRoute>} />
+            <Route path="/dashboard/vehicles/edit/:id" element={<ProtectedRoute><VehicleForm /></ProtectedRoute>} />
+            <Route path="/dashboard/vehicles/:id" element={<ProtectedRoute><VehicleDetail /></ProtectedRoute>} />
+            
+            {/* Rutas de diagnósticos */}
+            <Route path="/dashboard/diagnostics" element={<ProtectedRoute><DiagnosticList /></ProtectedRoute>} />
+            <Route path="/dashboard/diagnostics/new" element={<ProtectedRoute><StartDiagnostic /></ProtectedRoute>} />
+            <Route path="/dashboard/diagnostics/:id" element={<ProtectedRoute><DiagnosticDetail /></ProtectedRoute>} />
+            
+            {/* Ruta por defecto */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />

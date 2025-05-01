@@ -1,50 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-interface Diagnostic {
-  id: string;
-  userId: string;
-  vehicleInfo: {
-    make: string;
-    model: string;
-    year: number;
-    vin: string;
-    mileage: number;
-    engine: string;
-  };
-  symptoms: string[];
-  dtcCodes: string[];
-  diagnosis: {
-    problems: {
-      title: string;
-      description: string;
-      severity: 'low' | 'medium' | 'high' | 'critical';
-      probability: number;
-      partsNeeded: {
-        name: string;
-        partNumber: string;
-        estimatedCost: number;
-      }[];
-      laborTime: number;
-      laborCost: number;
-      totalCost: number;
-    }[];
-    aiConfidence: number;
-    recommendations: string[];
-  };
-  status: 'pending' | 'completed' | 'failed';
-  createdAt: string;
-  completedAt?: string;
-  report?: {
-    generatedAt?: string;
-    pdfUrl?: string;
-    customerNotes?: string;
-  };
-}
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Diagnostic, DiagnosticWithVehicle, StartDiagnosticRequest, StartDiagnosticResponse } from '../../types/diagnostic';
+import * as diagnosticService from '../../services/diagnosticService';
 
 interface DiagnosticState {
-  diagnostics: Diagnostic[];
-  currentDiagnostic: Diagnostic | null;
+  diagnostics: DiagnosticWithVehicle[];
+  currentDiagnostic: DiagnosticWithVehicle | null;
+  vehicleDiagnostics: Diagnostic[];
   loading: boolean;
   error: string | null;
 }
@@ -52,106 +13,127 @@ interface DiagnosticState {
 const initialState: DiagnosticState = {
   diagnostics: [],
   currentDiagnostic: null,
+  vehicleDiagnostics: [],
   loading: false,
-  error: null,
+  error: null
 };
 
-// Async thunks
-export const createDiagnostic = createAsyncThunk(
-  'diagnostic/create',
-  async (data: {
-    vehicleInfo: Diagnostic['vehicleInfo'];
-    symptoms: string[];
-    dtcCodes: string[];
-  }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/diagnostics', data);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to create diagnostic');
-    }
-  }
-);
-
-export const getDiagnostics = createAsyncThunk(
-  'diagnostic/getAll',
+// Thunks
+export const fetchDiagnostics = createAsyncThunk(
+  'diagnostics/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/api/diagnostics');
-      return response.data;
+      return await diagnosticService.getUserDiagnostics();
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch diagnostics');
+      return rejectWithValue(error.response?.data?.message || 'Error al obtener diagnósticos');
     }
   }
 );
 
-export const getDiagnosticById = createAsyncThunk(
-  'diagnostic/getById',
+export const fetchDiagnosticById = createAsyncThunk(
+  'diagnostics/fetchOne',
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/diagnostics/${id}`);
-      return response.data;
+      return await diagnosticService.getDiagnosticById(id);
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch diagnostic');
+      return rejectWithValue(error.response?.data?.message || 'Error al obtener el diagnóstico');
     }
   }
 );
 
+export const startNewDiagnostic = createAsyncThunk(
+  'diagnostics/startNew',
+  async (data: StartDiagnosticRequest, { rejectWithValue }) => {
+    try {
+      return await diagnosticService.startDiagnostic(data);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Error al iniciar el diagnóstico');
+    }
+  }
+);
+
+export const fetchVehicleDiagnostics = createAsyncThunk(
+  'diagnostics/fetchByVehicle',
+  async (vehicleId: string, { rejectWithValue }) => {
+    try {
+      return await diagnosticService.getVehicleDiagnostics(vehicleId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Error al obtener diagnósticos del vehículo');
+    }
+  }
+);
+
+// Slice
 const diagnosticSlice = createSlice({
-  name: 'diagnostic',
+  name: 'diagnostics',
   initialState,
   reducers: {
-    clearError: (state) => {
-      state.error = null;
-    },
     clearCurrentDiagnostic: (state) => {
       state.currentDiagnostic = null;
     },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
-    builder
-      // Create Diagnostic
-      .addCase(createDiagnostic.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createDiagnostic.fulfilled, (state, action) => {
-        state.loading = false;
-        state.diagnostics.unshift(action.payload);
-        state.currentDiagnostic = action.payload;
-      })
-      .addCase(createDiagnostic.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      // Get All Diagnostics
-      .addCase(getDiagnostics.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getDiagnostics.fulfilled, (state, action) => {
-        state.loading = false;
-        state.diagnostics = action.payload;
-      })
-      .addCase(getDiagnostics.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      // Get Diagnostic by ID
-      .addCase(getDiagnosticById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getDiagnosticById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentDiagnostic = action.payload;
-      })
-      .addCase(getDiagnosticById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
+    // Fetch all diagnostics
+    builder.addCase(fetchDiagnostics.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchDiagnostics.fulfilled, (state, action: PayloadAction<DiagnosticWithVehicle[]>) => {
+      state.loading = false;
+      state.diagnostics = action.payload;
+    });
+    builder.addCase(fetchDiagnostics.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+
+    // Fetch one diagnostic
+    builder.addCase(fetchDiagnosticById.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchDiagnosticById.fulfilled, (state, action: PayloadAction<DiagnosticWithVehicle>) => {
+      state.loading = false;
+      state.currentDiagnostic = action.payload;
+    });
+    builder.addCase(fetchDiagnosticById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+
+    // Start new diagnostic
+    builder.addCase(startNewDiagnostic.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(startNewDiagnostic.fulfilled, (state, action: PayloadAction<StartDiagnosticResponse>) => {
+      state.loading = false;
+      // We don't add the diagnostic to the list here because it starts as pending
+      // It will be added when we fetch diagnostics again
+    });
+    builder.addCase(startNewDiagnostic.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+
+    // Fetch diagnostics by vehicle
+    builder.addCase(fetchVehicleDiagnostics.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchVehicleDiagnostics.fulfilled, (state, action: PayloadAction<Diagnostic[]>) => {
+      state.loading = false;
+      state.vehicleDiagnostics = action.payload;
+    });
+    builder.addCase(fetchVehicleDiagnostics.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+  }
 });
 
-export const { clearError, clearCurrentDiagnostic } = diagnosticSlice.actions;
-export default diagnosticSlice.reducer; 
+export const { clearCurrentDiagnostic, clearError } = diagnosticSlice.actions;
+export default diagnosticSlice.reducer;

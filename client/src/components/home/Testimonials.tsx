@@ -1,180 +1,78 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import React from 'react';
 
-interface Testimonial {
-  id: number;
-  quote: string;
-  name: string;
-  position: string;
-  image: string;
-}
-
-const testimonials: Testimonial[] = [
+const testimonials = [
   {
-    id: 1,
-    quote: "This platform is revolutionary! It saved us time and reduced errors, making it the best investment for our shop. We've seen a 28% increase in customer satisfaction since implementing AutoDiagnose AI.",
-    name: "John Davis",
-    position: "Repair Shop Owner",
-    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg"
+    content: "AutoDiagnose ha sido una herramienta indispensable para mi taller. Nos ha permitido diagnosticar problemas de manera rápida y precisa, ahorrando tiempo y recursos.",
+    author: {
+      name: "Carlos Rodríguez",
+      role: "Propietario de Taller Mecánico",
+      imageUrl: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
+    },
   },
   {
-    id: 2,
-    quote: "It boosted our customer's trust and satisfaction levels. We've never looked back. The diagnostic accuracy is truly impressive, and we're closing repairs 40% faster than before.",
-    name: "Mia Thompson",
-    position: "Automotive Technician",
-    image: "https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg"
+    content: "Como propietaria de un auto antiguo, siempre me preocupaba no saber qué estaba fallando. Con AutoDiagnose puedo identificar problemas antes de que empeoren, ¡ha sido un salvavidas!",
+    author: {
+      name: "María González",
+      role: "Conductor Particular",
+      imageUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
+    },
   },
   {
-    id: 3,
-    quote: "Finally, a solution that fits our budget and needs, offering easy integration and fast results. Our warranty claims have dropped by 65% since we started using AutoDiagnose AI.",
-    name: "Alex Martinez",
-    position: "Auto Repair Professional",
-    image: "https://images.pexels.com/photos/8391552/pexels-photo-8391552.jpeg"
-  }
+    content: "Manejo una flota de vehículos para mi empresa y AutoDiagnose nos ha ayudado a reducir los costos de mantenimiento en un 30%. La anticipación de problemas es clave en nuestro negocio.",
+    author: {
+      name: "Javier Méndez",
+      role: "Gerente de Logística",
+      imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
+    },
+  },
 ];
 
 const Testimonials: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  
-  const handlePrev = () => {
-    setActiveIndex((prevIndex) => 
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
-  };
-  
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => 
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 6000);
-    
-    return () => clearInterval(interval);
-  }, []);
-  
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observerRef.current?.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    const animatedElements = document.querySelectorAll('.animate-fade-in');
-    animatedElements.forEach(el => {
-      observerRef.current?.observe(el);
-    });
-    
-    return () => {
-      if (observerRef.current) {
-        animatedElements.forEach(el => {
-          observerRef.current?.unobserve(el);
-        });
-      }
-    };
-  }, []);
-  
   return (
-    <section className="py-20 bg-primary-800 text-white">
-      <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="heading-lg text-center mb-16 animate-fade-in">What Our Users Say</h2>
-          
-          <div className="relative">
-            <div className="animate-fade-in" style={{transitionDelay: '200ms'}}>
-              {testimonials.map((testimonial, index) => (
-                <div 
-                  key={testimonial.id}
-                  className={`transition-opacity duration-500 absolute inset-0 ${
-                    index === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                  }`}
+    <section className="bg-gray-50 py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Lo que nuestros clientes dicen
+          </h2>
+          <p className="mt-4 text-lg text-gray-500">
+            Descubre cómo AutoDiagnose ha transformado la manera en que personas y empresas cuidan sus vehículos.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className="rounded-lg bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg"
+            >
+              <div className="relative">
+                <svg
+                  className="absolute -top-2 -left-2 h-8 w-8 text-blue-500 transform -rotate-12"
+                  fill="currentColor"
+                  viewBox="0 0 32 32"
+                  aria-hidden="true"
                 >
-                  <div className="flex flex-col md:flex-row items-center gap-8">
-                    <div className="md:w-1/3">
-                      <div className="relative">
-                        <div className="rounded-full overflow-hidden aspect-square border-4 border-secondary-500 shadow-xl">
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.name} 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="absolute -top-4 -left-4 bg-secondary-500 rounded-full p-3">
-                          <Quote className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="md:w-2/3 text-center md:text-left">
-                      <p className="text-xl leading-relaxed mb-6">
-                        "{testimonial.quote}"
-                      </p>
-                      <div>
-                        <h4 className="font-heading font-bold text-xl">{testimonial.name}</h4>
-                        <p className="text-blue-200">{testimonial.position}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Static container to maintain height */}
-            <div className="invisible">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="md:w-1/3">
-                  <div className="rounded-full overflow-hidden aspect-square">
-                    <div className="w-full h-full"></div>
-                  </div>
-                </div>
-                <div className="md:w-2/3">
-                  <p className="text-xl leading-relaxed mb-6">
-                    {testimonials[0].quote}
-                  </p>
-                  <div>
-                    <h4 className="font-heading font-bold text-xl">{testimonials[0].name}</h4>
-                    <p>{testimonials[0].position}</p>
-                  </div>
-                </div>
+                  <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                </svg>
+                <p className="relative mt-4 text-gray-600">
+                  {testimonial.content}
+                </p>
               </div>
-            </div>
-            
-            {/* Controls */}
-            <div className="flex justify-center mt-8 gap-4">
-              <button 
-                onClick={handlePrev}
-                className="p-2 rounded-full bg-blue-700 hover:bg-blue-600 transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <div className="flex gap-2 items-center">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      index === activeIndex ? 'bg-secondary-500 scale-125' : 'bg-blue-600'
-                    }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
+              <div className="mt-6 flex items-center">
+                <div className="flex-shrink-0">
+                  <img
+                    className="h-10 w-10 rounded-full object-cover"
+                    src={testimonial.author.imageUrl}
+                    alt={testimonial.author.name}
                   />
-                ))}
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">{testimonial.author.name}</p>
+                  <p className="text-sm text-gray-500">{testimonial.author.role}</p>
+                </div>
               </div>
-              <button 
-                onClick={handleNext}
-                className="p-2 rounded-full bg-blue-700 hover:bg-blue-600 transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

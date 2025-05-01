@@ -2,41 +2,54 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 
-interface AuthRequest extends Request {
-  user?: any;
+// Extender la interfaz Request para incluir el usuario
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        userId: string;
+        role: string;
+      };
+    }
+  }
 }
 
-export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const JWT_SECRET = process.env.JWT_SECRET || 'tu_secreto_jwt_super_seguro';
+
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-
-    if (!token) {
-      throw new Error();
+    // Obtener el token del header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'No se proporcionó token de autenticación' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-    const user = await User.findOne({ _id: (decoded as any)._id });
-
-    if (!user) {
-      throw new Error();
-    }
-
-    req.user = user;
+    const token = authHeader.split(' ')[1];
+    
+    // Verificar el token
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; role: string };
+    
+    // Adjuntar la información del usuario a la solicitud
+    req.user = {
+      userId: decoded.userId,
+      role: decoded.role
+    };
+    
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Please authenticate.' });
+    return res.status(401).json({ message: 'Token inválido o expirado' });
   }
 };
 
-export const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await auth(req, res, () => {
-      if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Acceso denegado' });
-      }
-      next();
-    });
-  } catch (error) {
-    res.status(401).json({ message: 'Por favor autentícate' });
+// Middleware para verificar si el usuario es administrador
+export const adminMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'No autenticado' });
   }
-}; 
+  
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Acceso denegado. Se requiere rol de administrador' });
+  }
+  
+  next();
+};

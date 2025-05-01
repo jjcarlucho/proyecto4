@@ -10,47 +10,45 @@ import { useToast } from '@/hooks/use-toast';
 import { AppDispatch, RootState } from '../../store';
 
 export function RegisterForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { loading } = useSelector((state: RootState) => state.auth);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const validatePasswords = () => {
+    if (password !== confirmPassword) {
+      setPasswordError('Las contraseñas no coinciden');
+      return false;
+    }
+    
+    if (password.length < 6) {
+      setPasswordError('La contraseña debe tener al menos 6 caracteres');
+      return false;
+    }
+    
+    setPasswordError('');
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(clearError());
-
-    if (formData.password !== formData.confirmPassword) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Las contraseñas no coinciden',
-      });
+    
+    if (!validatePasswords()) {
       return;
     }
-
+    
     try {
-      await dispatch(register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password
-      })).unwrap();
-      
+      await dispatch(register({ name, email, password })).unwrap();
       toast({
         title: 'Registro exitoso',
-        description: 'Tu cuenta ha sido creada',
+        description: 'Bienvenido a AutoDiagnose',
       });
       navigate('/dashboard');
     } catch (error) {
@@ -67,7 +65,7 @@ export function RegisterForm() {
       <CardHeader>
         <CardTitle>Crear Cuenta</CardTitle>
         <CardDescription>
-          Ingresa tus datos para crear una nueva cuenta
+          Regístrate para acceder a todas las funcionalidades
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -76,56 +74,59 @@ export function RegisterForm() {
             <Label htmlFor="name">Nombre</Label>
             <Input
               id="name"
-              name="name"
+              type="text"
               placeholder="Tu nombre"
-              value={formData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              name="email"
               type="email"
               placeholder="tu@email.com"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="password">Contraseña</Label>
             <Input
               id="password"
-              name="password"
               type="password"
               placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
             <Input
               id="confirmPassword"
-              name="confirmPassword"
               type="password"
               placeholder="••••••••"
-              value={formData.confirmPassword}
-              onChange={handleChange}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+            {passwordError && (
+              <p className="text-sm text-red-500 mt-1">{passwordError}</p>
+            )}
           </div>
         </CardContent>
         <CardFooter>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+            {loading ? 'Procesando...' : 'Registrarse'}
           </Button>
         </CardFooter>
       </form>
     </Card>
   );
-} 
+}

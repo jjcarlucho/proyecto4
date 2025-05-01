@@ -1,105 +1,74 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Play } from 'lucide-react';
 
 const Hero: React.FC = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observerRef.current?.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    const animatedElements = document.querySelectorAll('.animate-fade-in');
-    animatedElements.forEach(el => {
-      observerRef.current?.observe(el);
-    });
-    
-    return () => {
-      if (observerRef.current) {
-        animatedElements.forEach(el => {
-          observerRef.current?.unobserve(el);
-        });
-      }
-    };
-  }, []);
-
   return (
-    <section className="pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-br from-blue-50 to-blue-100 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 z-0 opacity-30">
-        <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-primary-400 filter blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-64 h-64 rounded-full bg-secondary-400 filter blur-3xl"></div>
+    <div className="relative bg-gray-50 overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-800 to-blue-600"></div>
       </div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center mb-12 animate-fade-in">
-          <h1 className="heading-xl text-gray-900 mb-6">
-            See how <span className="text-primary-800">AutoDiagnose AI</span> is transforming the automotive repair industry and why repair shop owners are adopting it faster than ever!
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-8">
-            AI-powered diagnostic platform that diagnoses vehicle issues <span className="font-bold text-primary-800">3x faster</span> with an impressive <span className="font-bold text-primary-800">97% accuracy rate</span>
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/demo" className="btn btn-primary text-lg">
-              Start Your 30-Day Trial
-            </Link>
-            <Link to="/features" className="btn btn-outline text-lg">
-              Explore Features
-            </Link>
-          </div>
-        </div>
-        
-        <div className="mt-16 max-w-5xl mx-auto animate-fade-in" style={{transitionDelay: '200ms'}}>
-          <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl border-8 border-white">
-            <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center group cursor-pointer hover:bg-gray-900/40 transition-colors">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
-                <Play className="h-8 w-8 text-primary-800 ml-1" />
+      <div className="relative pt-6 pb-16 sm:pb-24">
+        <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24 sm:px-6 lg:mt-32">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+            <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+              <h1>
+                <span className="block text-sm font-semibold uppercase tracking-wide text-gray-300 sm:text-base lg:text-sm xl:text-base">
+                  Diagnóstico Inteligente
+                </span>
+                <span className="mt-1 block text-4xl tracking-tight font-extrabold text-white sm:text-5xl xl:text-6xl">
+                  <span className="block">AutoDiagnose AI</span>
+                  <span className="block text-blue-200">Tu mecánico inteligente</span>
+                </span>
+              </h1>
+              <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                Diagnóstico automático de vehículos impulsado por inteligencia artificial. 
+                Detecta problemas antes de que se conviertan en averías graves 
+                y recibe recomendaciones precisas para mantener tu vehículo en óptimas condiciones.
+              </p>
+              <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
+                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                  <div className="rounded-md shadow">
+                    <Link
+                      to="/register"
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+                    >
+                      Comenzar Gratis
+                    </Link>
+                  </div>
+                  <div className="mt-3 sm:mt-0 sm:ml-3">
+                    <Link
+                      to="/demo"
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10"
+                    >
+                      Ver Demo
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-            <img 
-              src="https://images.pexels.com/photos/3806249/pexels-photo-3806249.jpeg" 
-              alt="Auto mechanic using diagnostic technology" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="mt-6 text-center">
-            <h3 className="font-heading font-semibold text-xl text-gray-800">"I just closed up the shop for today..."</h3>
-            <p className="text-gray-600">See how John's auto repair shop increased efficiency by 32%</p>
-          </div>
-        </div>
-        
-        <div className="mt-20 py-6 px-6 md:px-10 bg-white rounded-xl shadow-lg animate-fade-in" style={{transitionDelay: '300ms'}}>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary-800">1,500+</p>
-              <p className="text-gray-600">Repair Shops</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary-800">3x</p>
-              <p className="text-gray-600">Faster Diagnosis</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary-800">97%</p>
-              <p className="text-gray-600">Accuracy Rate</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary-800">500K+</p>
-              <p className="text-gray-600">Repair Cases</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-primary-800">$4.50</p>
-              <p className="text-gray-600">ROI per $1</p>
+            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+              <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
+                <div className="relative block w-full bg-white rounded-lg overflow-hidden">
+                  <img
+                    className="w-full"
+                    src="https://images.unsplash.com/photo-1563902452538-c93a2b7c0794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"
+                    alt="Diagnóstico de automóvil"
+                  />
+                  <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+                    <div className="bg-white bg-opacity-75 rounded-lg px-4 py-3">
+                      <svg className="h-10 w-10 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                      </svg>
+                      <span className="block text-sm font-medium text-gray-900">Ver cómo funciona</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -1,12 +1,16 @@
-# AutoDiagnose
+# AutoDiagnose AI
+
+![AutoDiagnose AI Logo](https://via.placeholder.com/150x50?text=AutoDiagnose+AI)
 
 Aplicación web para diagnóstico automático de vehículos desarrollada con el stack MERN (MongoDB, Express, React, Node.js).
 
 ## Características
 
-- Autenticación de usuarios
+- Autenticación de usuarios (registro, inicio de sesión)
 - Panel de administración
 - Diagnóstico automático de vehículos
+- Gestión de múltiples vehículos
+- Historial de diagnósticos
 - Reportes detallados
 - Interfaz moderna y responsive
 
@@ -40,8 +44,8 @@ Aplicación web para diagnóstico automático de vehículos desarrollada con el 
 
 1. Clonar el repositorio:
 ```bash
-git clone https://github.com/jjcarlucho/proyecto4.git
-cd proyecto4
+git clone https://github.com/jonathancarlucho/autodiagnose.git
+cd autodiagnose
 ```
 
 2. Instalar dependencias del cliente:
@@ -57,8 +61,17 @@ npm install
 ```
 
 4. Configurar variables de entorno:
-   - Crear archivo `.env` en la carpeta del cliente
-   - Crear archivo `.env` en la carpeta del servidor
+   - Crear archivo `.env` en la carpeta del cliente con:
+   ```
+   VITE_API_URL=http://localhost:5001/api
+   ```
+   - Crear archivo `.env` en la carpeta del servidor con:
+   ```
+   PORT=5001
+   MONGODB_URI=mongodb://localhost:27017/autodiagnose
+   JWT_SECRET=tu_secreto_jwt_super_seguro
+   NODE_ENV=development
+   ```
 
 5. Iniciar el servidor de desarrollo:
 
@@ -77,21 +90,23 @@ npm run dev
 ## Estructura del Proyecto
 
 ```
-proyecto4/
+autodiagnose/
 ├── client/                 # Frontend React
 │   ├── src/
-│   │   ├── components/    # Componentes React
-│   │   ├── pages/        # Páginas de la aplicación
-│   │   ├── store/        # Estado global (Redux)
-│   │   ├── styles/       # Estilos globales
-│   │   └── utils/        # Utilidades
+│   │   ├── components/     # Componentes React
+│   │   ├── pages/          # Páginas de la aplicación
+│   │   ├── store/          # Estado global (Redux)
+│   │   ├── hooks/          # Hooks personalizados
+│   │   ├── lib/            # Utilidades
+│   │   └── types/          # Tipos TypeScript
 │   └── ...
-├── server/                # Backend Node.js
+├── server/                 # Backend Node.js
 │   ├── src/
-│   │   ├── controllers/  # Controladores
-│   │   ├── models/       # Modelos MongoDB
-│   │   ├── routes/       # Rutas API
-│   │   └── middleware/   # Middleware
+│   │   ├── controllers/    # Controladores
+│   │   ├── models/         # Modelos MongoDB
+│   │   ├── routes/         # Rutas API
+│   │   ├── middleware/     # Middleware
+│   │   └── config/         # Configuración
 │   └── ...
 └── README.md
 ```
@@ -109,34 +124,66 @@ proyecto4/
 
 - `npm run dev`: Inicia el servidor en modo desarrollo
 - `npm run start`: Inicia el servidor en modo producción
-- `npm run test`: Ejecuta los tests
-
-## Variables de Entorno
-
-### Cliente (.env)
-```
-VITE_API_URL=http://localhost:5000/api
-```
-
-### Servidor (.env)
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/autodiagnose
-JWT_SECRET=your_jwt_secret
-NODE_ENV=development
-```
+- `npm run build`: Compila TypeScript a JavaScript
 
 ## API Endpoints
 
 ### Autenticación
-- POST /api/auth/register
-- POST /api/auth/login
-- POST /api/auth/logout
+- POST /api/auth/register - Registrar nuevo usuario
+- POST /api/auth/login - Iniciar sesión
 
 ### Usuarios
-- GET /api/users/profile
-- PUT /api/users/profile
-- PUT /api/users/change-password
+- GET /api/users/profile - Obtener perfil del usuario
+- PUT /api/users/profile - Actualizar perfil del usuario
+
+### Vehículos
+- GET /api/vehicles - Obtener todos los vehículos del usuario
+- GET /api/vehicles/:id - Obtener un vehículo por ID
+- POST /api/vehicles - Crear un nuevo vehículo
+- PUT /api/vehicles/:id - Actualizar un vehículo
+- DELETE /api/vehicles/:id - Eliminar un vehículo
+
+### Diagnósticos
+- GET /api/diagnostics - Obtener todos los diagnósticos del usuario
+- GET /api/diagnostics/:id - Obtener un diagnóstico por ID
+- POST /api/diagnostics/start - Iniciar un nuevo diagnóstico
+- GET /api/diagnostics/vehicle/:vehicleId - Obtener diagnósticos de un vehículo
+
+## Flujo de Trabajo Recomendado
+
+1. Registrarse como usuario
+2. Iniciar sesión
+3. Agregar uno o más vehículos 
+4. Iniciar un diagnóstico para un vehículo
+5. Ver los resultados del diagnóstico y las recomendaciones
+6. Consultar el historial de diagnósticos
+
+## Capturas de Pantalla
+
+(Próximamente)
+
+## Despliegue
+
+### Cliente (Frontend)
+El frontend puede ser desplegado en servicios como:
+- Vercel
+- Netlify
+- GitHub Pages
+
+### Servidor (Backend)
+El backend puede ser desplegado en servicios como:
+- Heroku
+- DigitalOcean
+- AWS EC2
+- Render
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+## Autor
+
+Jonathan Carlucho
 
 ## Contribución
 
@@ -145,11 +192,3 @@ NODE_ENV=development
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
-
-## Autor
-
-Jonathan Carlucho
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. 

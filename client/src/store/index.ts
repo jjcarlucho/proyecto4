@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import diagnosticReducer from './slices/diagnosticSlice';
 import subscriptionReducer from './slices/subscriptionSlice';
+import vehicleReducer from './slices/vehicleSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     diagnostic: diagnosticReducer,
     subscription: subscriptionReducer,
+    vehicle: vehicleReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

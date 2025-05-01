@@ -3,6 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRoutes from './routes/authRoutes';
+import userRoutes from './routes/userRoutes';
+import vehicleRoutes from './routes/vehicleRoutes';
+import diagnosticRoutes from './routes/diagnosticRoutes';
 
 // Configuración de variables de entorno
 dotenv.config();
@@ -15,6 +18,9 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/diagnostics', diagnosticRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
