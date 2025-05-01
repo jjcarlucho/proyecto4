@@ -1,81 +1,81 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { loginWithEmailAndPassword, loginWithGoogle } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
-import { login, clearError } from '../../store/slices/authSlice';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { AppDispatch, RootState } from '../../store';
+import { FcGoogle } from 'react-icons/fc';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const { loading } = useSelector((state: RootState) => state.auth);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(clearError());
-    
     try {
-      await dispatch(login({ email, password })).unwrap();
-      toast({
-        title: 'Inicio de sesión exitoso',
-        description: 'Bienvenido de nuevo',
-      });
+      await loginWithEmailAndPassword(email, password);
       navigate('/dashboard');
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Error al iniciar sesión',
-      });
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Iniciar Sesión</CardTitle>
         <CardDescription>
           Ingresa tus credenciales para acceder a tu cuenta
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+      <CardContent>
+        <form onSubmit={handleEmailLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
             <Input
-              id="email"
               type="email"
-              placeholder="tu@email.com"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Contraseña</Label>
             <Input
-              id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          <Button type="submit" className="w-full">
+            Iniciar Sesión
           </Button>
-        </CardFooter>
-      </form>
+        </form>
+      </CardContent>
+      <CardFooter>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full flex items-center gap-2"
+          onClick={handleGoogleLogin}
+        >
+          <FcGoogle className="w-5 h-5" />
+          Continuar con Google
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
