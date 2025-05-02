@@ -9,8 +9,6 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-
 // Registrar un nuevo usuario
 export const register = async (email: string, password: string): Promise<User> => {
   try {

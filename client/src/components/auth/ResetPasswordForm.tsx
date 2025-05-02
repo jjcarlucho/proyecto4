@@ -5,6 +5,7 @@ import { resetPassword } from '../../store/slices/authSlice';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { AppDispatch } from '../../store';
 
 interface ResetPasswordFormProps {
   oobCode: string;
@@ -14,7 +15,7 @@ export function ResetPasswordForm({ oobCode }: ResetPasswordFormProps) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

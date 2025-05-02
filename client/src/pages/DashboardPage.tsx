@@ -1,60 +1,21 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import React from 'react';
+import { useAuth } from '../hooks/useAuth';
 
-export function DashboardPage() {
-  const { user } = useSelector((state: RootState) => state.auth);
+export default function DashboardPage() {
+  const { user } = useAuth();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Bienvenido, {user?.name}</CardTitle>
-            <CardDescription>
-              Panel de control de AutoDiagnose
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-500">
-              Email: {user?.email}
+    <div className="min-h-screen bg-gray-100">
+      <main className="py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <div className="mt-4">
+            <p className="text-lg text-gray-700">
+              Bienvenido, {user?.email}
             </p>
-            <p className="text-sm text-gray-500">
-              Rol: {user?.role}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Estadísticas</CardTitle>
-            <CardDescription>
-              Resumen de actividad
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-500">
-              Próximamente: Estadísticas de uso
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Acciones Rápidas</CardTitle>
-            <CardDescription>
-              Tareas comunes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-500">
-              Próximamente: Acciones rápidas
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 } 

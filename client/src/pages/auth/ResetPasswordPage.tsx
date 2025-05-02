@@ -1,8 +1,15 @@
 import React, { useEffect } from 'react';
 import { ResetPasswordForm } from '../../components/auth/ResetPasswordForm';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
-export function ResetPasswordPage() {
+export default function ResetPasswordPage() {
+  const [searchParams] = useSearchParams();
+  const oobCode = searchParams.get('oobCode');
+
+  if (!oobCode) {
+    return <div>Código de restablecimiento inválido</div>;
+  }
+
   useEffect(() => {
     document.title = 'Restablecer Contraseña - AutoDiagnose AI';
   }, []);
@@ -21,7 +28,7 @@ export function ResetPasswordPage() {
             </Link>
           </p>
         </div>
-        <ResetPasswordForm />
+        <ResetPasswordForm oobCode={oobCode} />
       </div>
     </div>
   );
