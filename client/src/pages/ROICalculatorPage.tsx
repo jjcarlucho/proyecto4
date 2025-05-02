@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ROICalculator from '../components/calculators/ROICalculator';
+import { ROICalculator } from '../components/calculators/ROICalculator';
 
 const ROICalculatorPage: React.FC = () => {
   useEffect(() => {

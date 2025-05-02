@@ -25,11 +25,11 @@ export function ROICalculator() {
     const count = parseInt(vehicleCount);
     if (isNaN(count)) return;
 
-    calculateROI(count, selectedPlan);
+    calculateROI(count);
     setShowResults(true);
   };
 
-  const calculateROI = (count: number, plan: string) => {
+  const calculateROI = (count: number) => {
     // Traditional costs
     const traditionalCosts: CostData = {
       name: 'Método Tradicional',

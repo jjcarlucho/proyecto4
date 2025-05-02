@@ -22,9 +22,13 @@ export const register = async (email: string, password: string): Promise<User> =
 };
 
 // Iniciar sesión
-export const login = async (credentials: { email: string; password: string }) => {
-  const response = await axios.post(`${API_URL}/auth/login`, credentials);
-  return response.data;
+export const login = async (credentials: { email: string; password: string }): Promise<User> => {
+  try {
+    const result = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+    return result.user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
 
 // Solicitar restablecimiento de contraseña

@@ -8,6 +8,8 @@ interface AuthState {
   error: string | null;
   forgotPasswordSuccess: boolean;
   resetPasswordSuccess: boolean;
+  isAuthenticated: boolean;
+  token: string | null;
 }
 
 const initialState: AuthState = {
@@ -15,7 +17,9 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   forgotPasswordSuccess: false,
-  resetPasswordSuccess: false
+  resetPasswordSuccess: false,
+  isAuthenticated: false,
+  token: null
 };
 
 export const login = createAsyncThunk(
@@ -28,7 +32,7 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (credentials: { email: string; password: string }) => {
+  async (credentials: { email: string; password: string; name: string }) => {
     const user = await authService.register(credentials.email, credentials.password);
     return user;
   }
@@ -75,6 +79,10 @@ const authSlice = createSlice({
     },
     clearResetSuccess: (state) => {
       state.resetPasswordSuccess = false;
+    },
+    setToken: (state, action) => {
+      state.token = action.payload;
+      state.isAuthenticated = !!action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -87,10 +95,12 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       state.error = null;
+      state.isAuthenticated = true;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || 'Error al iniciar sesión';
+      state.isAuthenticated = false;
     });
 
     // Register
@@ -102,10 +112,12 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       state.error = null;
+      state.isAuthenticated = true;
     });
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || 'Error al registrar usuario';
+      state.isAuthenticated = false;
     });
 
     // Google Login
@@ -117,10 +129,12 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       state.error = null;
+      state.isAuthenticated = true;
     });
     builder.addCase(loginWithGoogle.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || 'Error al iniciar sesión con Google';
+      state.isAuthenticated = false;
     });
 
     // Forgot Password
@@ -162,6 +176,8 @@ const authSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.loading = false;
       state.user = null;
+      state.isAuthenticated = false;
+      state.token = null;
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.loading = false;
@@ -170,5 +186,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { clearError, clearForgotSuccess, clearResetSuccess } = authSlice.actions;
+export const { clearError, clearForgotSuccess, clearResetSuccess, setToken } = authSlice.actions;
 export default authSlice.reducer;
