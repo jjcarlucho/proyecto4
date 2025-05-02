@@ -33,14 +33,13 @@ export default function ROICalculatorPage() {
     e.preventDefault();
 
     const vehicles = Number(formData.vehiclesPerMonth);
-    const repairCost = Number(formData.averageRepairCost);
     const laborRate = Number(formData.laborRate);
     const technicians = Number(formData.technicianCount);
 
     // Calculate potential revenue increase (assuming 10% more efficient diagnostics)
     const timePerDiagnostic = 1; // hour
     const diagnosticsPerMonth = vehicles;
-    const currentRevenue = (diagnosticsPerMonth * timePerDiagnostic * laborRate * technicians) + (diagnosticsPerMonth * repairCost);
+    const currentRevenue = diagnosticsPerMonth * timePerDiagnostic * laborRate * technicians;
     const improvedRevenue = currentRevenue * 1.1; // 10% improvement
     const monthlyRevenue = improvedRevenue - currentRevenue;
 
