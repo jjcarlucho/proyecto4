@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Gauge, Car, FileSpreadsheet, User, LogOut, Calculator } from 'lucide-react';
+import { Menu, X, Car, User, LogOut, Calculator } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,

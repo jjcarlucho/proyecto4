@@ -1,54 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Check } from 'lucide-react';
 import { PricingPlans } from '../components/pricing/PricingPlans';
-
-const tiers = [
-  {
-    name: 'Basic',
-    price: '19.99',
-    description: 'Essential diagnostics for your personal vehicle.',
-    features: [
-      '3 diagnostics per month',
-      'Basic maintenance alerts',
-      'Register 1 vehicle',
-      'Diagnostic history',
-      'Email support',
-    ],
-    cta: 'Get Started',
-    mostPopular: false,
-  },
-  {
-    name: 'Standard',
-    price: '59.99',
-    description: 'Comprehensive diagnostics for multiple vehicles.',
-    features: [
-      '15 diagnostics per month',
-      'Real-time alerts',
-      'Register up to 3 vehicles',
-      'Detailed diagnostic history',
-      'Personalized recommendations',
-      'Priority support',
-    ],
-    cta: 'Get Started',
-    mostPopular: true,
-  },
-  {
-    name: 'Premium',
-    price: '99.99',
-    description: 'Unlimited diagnostics for serious vehicle owners.',
-    features: [
-      'Unlimited diagnostics',
-      'Advanced vehicle monitoring',
-      'Unlimited vehicle registration',
-      'Advanced reports',
-      'API integration',
-      '24/7 technical support',
-    ],
-    cta: 'Early Access Pricing',
-    mostPopular: false,
-  },
-];
 
 export default function PricingPage() {
   useEffect(() => {
