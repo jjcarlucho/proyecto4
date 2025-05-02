@@ -6,14 +6,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { useAuth } from '../../hooks/useAuth';
 
 interface NavLink {
-  name: string;
-  path: string;
+  href: string;
+  label: string;
   icon?: React.ReactNode;
 }
 
@@ -21,22 +23,16 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
-  // Links for unauthenticated users
   const publicLinks: NavLink[] = [
-    { name: 'Home', path: '/' },
-    { name: 'Features', path: '/features' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'ROI Calculator', path: '/roi-calculator' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/roi-calculator', label: 'ROI Calculator', icon: <Calculator className="h-4 w-4" /> },
   ];
 
-  // Links for authenticated users
   const privateLinks: NavLink[] = [
-    { name: 'Dashboard', path: '/dashboard', icon: <Gauge className="mr-2 h-4 w-4" /> },
-    { name: 'Vehicles', path: '/dashboard/vehicles', icon: <Car className="mr-2 h-4 w-4" /> },
-    { name: 'Diagnostics', path: '/dashboard/diagnostics', icon: <FileSpreadsheet className="mr-2 h-4 w-4" /> },
-    { name: 'ROI Calculator', path: '/roi-calculator', icon: <Calculator className="mr-2 h-4 w-4" /> },
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/diagnostics', label: 'Diagnostics', icon: <Car className="h-4 w-4" /> },
   ];
 
   // Close the mobile menu when changing pages
@@ -50,7 +46,7 @@ const Header: React.FC = () => {
   };
 
   // Use the appropriate links based on authentication status
-  const links = user ? privateLinks : publicLinks;
+  const links = isAuthenticated ? privateLinks : publicLinks;
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -70,52 +66,49 @@ const Header: React.FC = () => {
             <nav className="hidden md:ml-6 md:flex md:space-x-4 items-center">
               {links.map((link) => (
                 <Link
-                  key={link.path}
-                  to={link.path}
+                  key={link.href}
+                  to={link.href}
                   className={`px-3 py-2 text-sm font-medium rounded-md ${
-                    location.pathname === link.path
+                    location.pathname === link.href
                       ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  {link.name}
+                  {link.icon && <span className="mr-2">{link.icon}</span>}
+                  {link.label}
                 </Link>
               ))}
             </nav>
           </div>
           <div className="hidden md:flex items-center">
-            {user ? (
+            {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700">{user.email}</span>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-8 w-8 cursor-pointer">
-                      <AvatarFallback className="bg-blue-600 text-white">
-                        {user.email?.charAt(0).toUpperCase() || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8 cursor-pointer">
+                        <AvatarFallback className="bg-blue-600 text-white">
+                          {user?.displayName?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem 
-                      className="cursor-pointer"
-                      onClick={() => navigate('/dashboard')}
-                    >
-                      <Gauge className="mr-2 h-4 w-4" />
-                      <span>Dashboard</span>
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user?.displayName}</p>
+                        <p className="text-xs leading-none text-gray-500">{user?.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="cursor-pointer">
+                        Profile Settings
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      className="cursor-pointer"
-                      onClick={() => navigate('/dashboard/profile')}
-                    >
-                      <User className="mr-2 h-4 w-4" />
-                      <span>My Profile</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      className="cursor-pointer text-red-600"
-                      onClick={handleLogout}
-                    >
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign Out</span>
+                      <span>Log out</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -155,34 +148,34 @@ const Header: React.FC = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
             {links.map((link) => (
               <Link
-                key={link.path}
-                to={link.path}
+                key={link.href}
+                to={link.href}
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  location.pathname === link.path
+                  location.pathname === link.href
                     ? 'bg-blue-50 text-blue-700'
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <div className="flex items-center">
                   {link.icon}
-                  {link.name}
+                  {link.label}
                 </div>
               </Link>
             ))}
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
-            {user ? (
+            {isAuthenticated ? (
               <div className="px-2 space-y-1">
                 <div className="block px-3 py-2 text-base font-medium text-gray-500">
-                  {user.email}
+                  {user?.email}
                 </div>
                 <Link
-                  to="/dashboard/profile"
+                  to="/profile"
                   className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                 >
                   <div className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
-                    <span>My Profile</span>
+                    <span>Profile Settings</span>
                   </div>
                 </Link>
                 <button

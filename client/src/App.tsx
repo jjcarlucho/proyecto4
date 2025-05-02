@@ -11,6 +11,9 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import DashboardPage from './pages/DashboardPage';
 import PricingPage from './pages/PricingPage';
 import ROICalculatorPage from './pages/ROICalculatorPage';
+import DiagnosticsPage from './pages/DiagnosticsPage';
+import DiagnosticDetailPage from './pages/DiagnosticDetailPage';
+import ProfilePage from './pages/ProfilePage';
 import { Toaster } from './components/ui/toaster';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
@@ -37,6 +40,30 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="diagnostics"
+                element={
+                  <ProtectedRoute>
+                    <DiagnosticsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="diagnostics/:id"
+                element={
+                  <ProtectedRoute>
+                    <DiagnosticDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
