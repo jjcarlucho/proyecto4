@@ -1,166 +1,147 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Check, X } from 'lucide-react';
+import { useState } from 'react';
+import { Check } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useNavigate } from 'react-router-dom';
 
-interface PricingFeature {
+interface Plan {
+  id: string;
   name: string;
-  starter: boolean;
-  professional: boolean;
-  enterprise: boolean;
+  price: number;
+  description: string;
+  features: string[];
+  recommended?: boolean;
 }
 
-const features: PricingFeature[] = [
-  { name: "Basic diagnostics", starter: true, professional: true, enterprise: true },
-  { name: "Vehicle history reports", starter: true, professional: true, enterprise: true },
-  { name: "100 diagnostics/month", starter: true, professional: false, enterprise: false },
-  { name: "Unlimited diagnostics", starter: false, professional: true, enterprise: true },
-  { name: "Basic knowledge base", starter: true, professional: false, enterprise: false },
-  { name: "Complete knowledge base", starter: false, professional: true, enterprise: true },
-  { name: "Email support", starter: true, professional: true, enterprise: true },
-  { name: "Priority 24/7 support", starter: false, professional: true, enterprise: true },
-  { name: "Basic reports", starter: true, professional: false, enterprise: false },
-  { name: "Advanced analytics", starter: false, professional: true, enterprise: true },
-  { name: "Inventory integration", starter: false, professional: true, enterprise: true },
-  { name: "API access", starter: false, professional: false, enterprise: true },
-  { name: "Multi-user access", starter: false, professional: false, enterprise: true },
-  { name: "Custom branding", starter: false, professional: false, enterprise: true },
-  { name: "Dedicated support agent", starter: false, professional: false, enterprise: true },
+const plans: Plan[] = [
+  {
+    id: 'basic',
+    name: 'Basic',
+    price: 29,
+    description: 'Perfect for small workshops',
+    features: [
+      'Up to 10 vehicles per month',
+      'Basic diagnostic reports',
+      'Email support',
+      '1 user account',
+    ],
+  },
+  {
+    id: 'pro',
+    name: 'Professional',
+    price: 79,
+    description: 'Best for growing businesses',
+    features: [
+      'Up to 50 vehicles per month',
+      'Advanced diagnostic reports',
+      'Priority email & chat support',
+      'Up to 3 user accounts',
+      'Custom branding',
+      'API access',
+    ],
+    recommended: true,
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 199,
+    description: 'For large scale operations',
+    features: [
+      'Unlimited vehicles',
+      'Advanced diagnostic reports',
+      '24/7 priority support',
+      'Unlimited user accounts',
+      'Custom branding',
+      'API access',
+      'Custom integrations',
+      'Dedicated account manager',
+    ],
+  },
 ];
 
-const PricingPlans: React.FC = () => {
+export function PricingPlans() {
+  const [selectedPlan, setSelectedPlan] = useState<string>('pro');
+  const navigate = useNavigate();
+
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlan(planId);
+  };
+
+  const handleContinue = () => {
+    navigate('/register', { state: { selectedPlan } });
+  };
+
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-block px-4 py-2 bg-blue-100 text-primary-800 rounded-full font-medium text-sm mb-4">Pricing</span>
-          <h2 className="heading-lg text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-xl text-gray-600">
-            Choose the plan that fits your repair shop's needs and budget. All plans include a 30-day free trial.
+    <div className="py-12 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">Choose your plan</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Select the plan that best fits your needs
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Starter Plan */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden transition-transform hover:shadow-xl hover:-translate-y-1">
-            <div className="p-8 bg-white">
-              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-2">Starter</h3>
-              <p className="text-gray-500 mb-6">Perfect for small repair shops</p>
-              <div className="mb-6">
-                <span className="text-5xl font-bold text-gray-900">$199</span>
-                <span className="text-gray-500">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {features.slice(0, 7).map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    {feature.starter ? (
-                      <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="w-5 h-5 text-gray-300 shrink-0 mt-0.5" />
-                    )}
-                    <span className={feature.starter ? 'text-gray-700' : 'text-gray-400'}>
-                      {feature.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Link 
-                to="/demo" 
-                className="btn btn-outline w-full block text-center"
-              >
-                Start Free Trial
-              </Link>
-            </div>
-          </div>
-          
-          {/* Professional Plan */}
-          <div className="border-2 border-primary-800 rounded-xl overflow-hidden shadow-xl transition-transform hover:-translate-y-1 relative">
-            <div className="absolute top-0 inset-x-0 flex justify-center">
-              <span className="bg-primary-800 text-white px-4 py-1 text-sm font-medium rounded-b-lg">
-                Most Popular
-              </span>
-            </div>
-            <div className="p-8 bg-white pt-12">
-              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-2">Professional</h3>
-              <p className="text-gray-500 mb-6">Ideal for growing repair businesses</p>
-              <div className="mb-6">
-                <span className="text-5xl font-bold text-gray-900">$299</span>
-                <span className="text-gray-500">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {features.slice(0, 11).map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    {feature.professional ? (
-                      <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="w-5 h-5 text-gray-300 shrink-0 mt-0.5" />
-                    )}
-                    <span className={feature.professional ? 'text-gray-700' : 'text-gray-400'}>
-                      {feature.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Link 
-                to="/demo" 
-                className="btn btn-primary w-full block text-center"
-              >
-                Start Free Trial
-              </Link>
-            </div>
-          </div>
-          
-          {/* Enterprise Plan */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden transition-transform hover:shadow-xl hover:-translate-y-1">
-            <div className="p-8 bg-white">
-              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-2">Enterprise</h3>
-              <p className="text-gray-500 mb-6">For multi-location repair networks</p>
-              <div className="mb-6">
-                <span className="text-5xl font-bold text-gray-900">$499</span>
-                <span className="text-gray-500">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    {feature.enterprise ? (
-                      <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="w-5 h-5 text-gray-300 shrink-0 mt-0.5" />
-                    )}
-                    <span className={feature.enterprise ? 'text-gray-700' : 'text-gray-400'}>
-                      {feature.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Link 
-                to="/demo" 
-                className="btn btn-outline w-full block text-center"
-              >
-                Start Free Trial
-              </Link>
-            </div>
-          </div>
-        </div>
-        
-        <div className="max-w-4xl mx-auto mt-16 bg-gray-50 rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
-          <div className="md:w-3/4">
-            <h3 className="font-heading font-bold text-2xl mb-3">Need a custom solution?</h3>
-            <p className="text-gray-600">
-              Contact our team for custom pricing for large enterprises and special requirements.
-            </p>
-          </div>
-          <div className="md:w-1/4">
-            <Link 
-              to="/contact" 
-              className="btn btn-primary whitespace-nowrap"
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-3">
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              className={`relative rounded-2xl border p-8 shadow-sm ${
+                selectedPlan === plan.id
+                  ? 'border-blue-600 ring-2 ring-blue-600'
+                  : 'border-gray-200'
+              }`}
             >
-              Contact Sales
-            </Link>
-          </div>
+              {plan.recommended && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center rounded-full bg-blue-100 px-4 py-1 text-sm font-medium text-blue-800">
+                    Recommended
+                  </span>
+                </div>
+              )}
+
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                <p className="mt-2 text-sm text-gray-500">{plan.description}</p>
+                <p className="mt-4">
+                  <span className="text-4xl font-bold tracking-tight text-gray-900">
+                    ${plan.price}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-600">/month</span>
+                </p>
+              </div>
+
+              <ul className="mt-8 space-y-3">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start">
+                    <Check className="h-5 w-5 flex-shrink-0 text-green-500" />
+                    <span className="ml-3 text-sm text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                className={`mt-8 w-full ${
+                  selectedPlan === plan.id
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-white text-blue-600 hover:bg-gray-50 border border-blue-600'
+                }`}
+                onClick={() => handleSelectPlan(plan.id)}
+              >
+                {selectedPlan === plan.id ? 'Selected' : 'Select Plan'}
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Button
+            size="lg"
+            onClick={handleContinue}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            Continue with {plans.find(p => p.id === selectedPlan)?.name} Plan
+          </Button>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default PricingPlans;
+}

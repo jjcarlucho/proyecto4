@@ -1,98 +1,217 @@
-import React, { useEffect } from 'react';
-import { ROICalculator } from '../components/calculators/ROICalculator';
+import { useState } from 'react';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 
-const ROICalculatorPage: React.FC = () => {
-  useEffect(() => {
-    document.title = 'ROI Calculator - AutoDiagnose AI';
-  }, []);
+interface ROICalculation {
+  monthlyRevenue: number;
+  annualSavings: number;
+  paybackPeriod: number;
+  roi: number;
+}
+
+export default function ROICalculatorPage() {
+  const [formData, setFormData] = useState({
+    vehiclesPerMonth: '',
+    averageRepairCost: '',
+    laborRate: '',
+    technicianCount: '',
+  });
+
+  const [calculation, setCalculation] = useState<ROICalculation | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const calculateROI = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const vehicles = Number(formData.vehiclesPerMonth);
+    const repairCost = Number(formData.averageRepairCost);
+    const laborRate = Number(formData.laborRate);
+    const technicians = Number(formData.technicianCount);
+
+    // Calculate potential revenue increase (assuming 10% more efficient diagnostics)
+    const timePerDiagnostic = 1; // hour
+    const diagnosticsPerMonth = vehicles;
+    const currentRevenue = diagnosticsPerMonth * timePerDiagnostic * laborRate;
+    const improvedRevenue = currentRevenue * 1.1; // 10% improvement
+    const monthlyRevenue = improvedRevenue - currentRevenue;
+
+    // Calculate annual savings
+    const monthlyDiagnosticCost = 79; // Professional plan cost
+    const annualSubscriptionCost = monthlyDiagnosticCost * 12;
+    const annualLaborSavings = monthlyRevenue * 12;
+    const annualSavings = annualLaborSavings - annualSubscriptionCost;
+
+    // Calculate payback period in months
+    const paybackPeriod = (annualSubscriptionCost / monthlyRevenue);
+
+    // Calculate ROI percentage
+    const roi = ((annualSavings / annualSubscriptionCost) * 100);
+
+    setCalculation({
+      monthlyRevenue,
+      annualSavings,
+      paybackPeriod,
+      roi
+    });
+  };
 
   return (
-    <div className="pt-16 pb-20">
-      <div className="bg-blue-700 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
-              ROI Calculator
-            </h1>
-            <p className="mt-5 max-w-xl mx-auto text-xl text-blue-100">
-              Discover how much you can save with AutoDiagnose AI for your automotive business.
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900">ROI Calculator</h1>
+          <p className="mt-4 text-xl text-gray-600">
+            Calculate your potential return on investment with AutoDiagnose AI
+          </p>
         </div>
-      </div>
 
-      <ROICalculator />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <form onSubmit={calculateROI} className="space-y-6">
+              <div>
+                <Label htmlFor="vehiclesPerMonth">Vehicles Serviced per Month</Label>
+                <Input
+                  id="vehiclesPerMonth"
+                  name="vehiclesPerMonth"
+                  type="number"
+                  required
+                  value={formData.vehiclesPerMonth}
+                  onChange={handleChange}
+                  placeholder="e.g., 50"
+                  className="mt-1"
+                />
+              </div>
 
-      <div className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Testimonials</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Trusted by Auto Professionals Worldwide
-            </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              See what other businesses achieved after implementing AutoDiagnose AI.
-            </p>
+              <div>
+                <Label htmlFor="averageRepairCost">Average Repair Cost ($)</Label>
+                <Input
+                  id="averageRepairCost"
+                  name="averageRepairCost"
+                  type="number"
+                  required
+                  value={formData.averageRepairCost}
+                  onChange={handleChange}
+                  placeholder="e.g., 500"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="laborRate">Labor Rate per Hour ($)</Label>
+                <Input
+                  id="laborRate"
+                  name="laborRate"
+                  type="number"
+                  required
+                  value={formData.laborRate}
+                  onChange={handleChange}
+                  placeholder="e.g., 100"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="technicianCount">Number of Technicians</Label>
+                <Input
+                  id="technicianCount"
+                  name="technicianCount"
+                  type="number"
+                  required
+                  value={formData.technicianCount}
+                  onChange={handleChange}
+                  placeholder="e.g., 3"
+                  className="mt-1"
+                />
+              </div>
+
+              <Button type="submit" className="w-full">
+                Calculate ROI
+              </Button>
+            </form>
           </div>
 
-          <div className="mt-10">
-            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
-              <div className="relative">
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <div className="flex items-center mb-4">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      JM
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-medium text-gray-900">John Martinez</h3>
-                      <p className="text-sm text-gray-500">Fleet Manager, Express Logistics</p>
-                    </div>
-                  </div>
-                  <blockquote className="text-gray-600">
-                    "Within six months of implementing AutoDiagnose AI, we reduced our breakdown-related downtime by 37% and cut our overall maintenance costs by over $45,000. The ROI calculator was spot-on with its predictions."
-                  </blockquote>
-                </div>
-              </div>
+          <div>
+            {calculation && (
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Monthly Revenue Increase</CardTitle>
+                    <CardDescription>
+                      Additional revenue from improved efficiency
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-3xl font-bold text-green-600">
+                      ${calculation.monthlyRevenue.toFixed(2)}
+                    </p>
+                  </CardContent>
+                </Card>
 
-              <div className="relative">
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <div className="flex items-center mb-4">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      SC
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-medium text-gray-900">Sarah Chen</h3>
-                      <p className="text-sm text-gray-500">Owner, Premier Auto Repair</p>
-                    </div>
-                  </div>
-                  <blockquote className="text-gray-600">
-                    "AutoDiagnose AI has transformed our shop. Diagnosis accuracy improved by 68%, customer complaints dropped by 42%, and we've seen a 31% increase in customer retention. The return has far exceeded our initial investment."
-                  </blockquote>
-                </div>
-              </div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Annual Savings</CardTitle>
+                    <CardDescription>
+                      Net savings after subscription costs
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-3xl font-bold text-green-600">
+                      ${calculation.annualSavings.toFixed(2)}
+                    </p>
+                  </CardContent>
+                </Card>
 
-              <div className="relative">
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <div className="flex items-center mb-4">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                      DR
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-medium text-gray-900">David Rodriguez</h3>
-                      <p className="text-sm text-gray-500">Chief Mechanic, City Motors</p>
-                    </div>
-                  </div>
-                  <blockquote className="text-gray-600">
-                    "The accuracy of diagnostics with AutoDiagnose AI is astounding. We're saving hours on complex problems, catching issues earlier, and dramatically increasing our throughput. The ROI calculator accurately predicted we'd break even in 2.3 months."
-                  </blockquote>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Payback Period</CardTitle>
+                    <CardDescription>
+                      Time to recover investment
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-3xl font-bold text-blue-600">
+                      {calculation.paybackPeriod.toFixed(1)} months
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Return on Investment</CardTitle>
+                    <CardDescription>
+                      Annual ROI percentage
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-3xl font-bold text-blue-600">
+                      {calculation.roi.toFixed(1)}%
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {!calculation && (
+              <div className="h-full flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <p className="text-lg">
+                    Fill out the form to see your potential return on investment
+                  </p>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default ROICalculatorPage;
+}

@@ -9,6 +9,8 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import DashboardPage from './pages/DashboardPage';
+import PricingPage from './pages/PricingPage';
+import ROICalculatorPage from './pages/ROICalculatorPage';
 import { Toaster } from './components/ui/toaster';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="register" element={<RegisterPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
               <Route path="reset-password" element={<ResetPasswordPage />} />
+              <Route path="pricing" element={<PricingPage />} />
+              <Route path="roi-calculator" element={<ROICalculatorPage />} />
 
               {/* Protected routes */}
               <Route
