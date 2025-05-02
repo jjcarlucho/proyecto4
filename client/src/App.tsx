@@ -8,7 +8,7 @@ import ROICalculatorPage from './pages/ROICalculatorPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
-import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import Dashboard from './pages/Dashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from './components/ui/toaster';

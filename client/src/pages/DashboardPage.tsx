@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchVehicles } from '../store/slices/vehicleSlice';
+import { fetchDiagnostics } from '../store/slices/diagnosticSlice';
+import { AppDispatch } from '../store';
 import { useAuth } from '../hooks/useAuth';
 
 export default function DashboardPage() {
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useAuth();
+
+  useEffect(() => {
+    dispatch(fetchVehicles());
+    dispatch(fetchDiagnostics());
+  }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -11,7 +21,7 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <div className="mt-4">
             <p className="text-lg text-gray-700">
-              Bienvenido, {user?.email}
+              Welcome, {user?.email}
             </p>
           </div>
         </div>

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { ForgotPasswordForm } from '../../components/auth/ForgotPasswordForm';
 import { Link } from 'react-router-dom';
 
 export function ForgotPasswordPage() {
   useEffect(() => {
-    document.title = 'Recuperar Contraseña - AutoDiagnose AI';
+    document.title = 'Reset Password - AutoDiagnose AI';
   }, []);
 
   return (
@@ -12,12 +12,12 @@ export function ForgotPasswordPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Recuperar contraseña
+            Reset Password
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            ¿Recordaste tu contraseña?{' '}
+            Remembered your password?{' '}
             <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Iniciar sesión
+              Sign in
             </Link>
           </p>
         </div>
