@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { logout } from '../store/slices/authSlice';
+import { AppDispatch } from '../store';
 
 export const useAuth = () => {
   const { 
@@ -10,7 +11,7 @@ export const useAuth = () => {
     forgotPasswordSuccess,
     resetPasswordSuccess 
   } = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = async () => {
     await dispatch(logout());

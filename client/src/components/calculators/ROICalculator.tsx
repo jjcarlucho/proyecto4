@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Calculator, DollarSign, Car, Clock, User, Wrench, TrendingUp, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';

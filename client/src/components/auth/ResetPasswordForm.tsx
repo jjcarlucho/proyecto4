@@ -1,157 +1,88 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
-import { resetPassword, clearError, clearResetSuccess } from '../../store/slices/authSlice';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { resetPassword } from '../../store/slices/authSlice';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { Alert, AlertDescription } from '../ui/alert';
-import { AppDispatch, RootState } from '../../store';
-import { useToast } from '@/hooks/use-toast';
 
-export function ResetPasswordForm() {
-  const { token } = useParams<{ token: string }>();
-  const [password, setPassword] = useState('');
+interface ResetPasswordFormProps {
+  oobCode: string;
+}
+
+export function ResetPasswordForm({ oobCode }: ResetPasswordFormProps) {
+  const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  
-  const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  
-  const { loading, error, resetPasswordSuccess } = useSelector((state: RootState) => state.auth);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearError());
-      dispatch(clearResetSuccess());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (resetPasswordSuccess) {
-      // Redirigir al usuario a la página de inicio de sesión después de unos segundos
-      const timer = setTimeout(() => {
-        navigate('/login');
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [resetPasswordSuccess, navigate]);
-
-  const validatePasswords = () => {
-    if (password !== confirmPassword) {
-      setPasswordError('Las contraseñas no coinciden');
-      return false;
-    }
-    
-    if (password.length < 6) {
-      setPasswordError('La contraseña debe tener al menos 6 caracteres');
-      return false;
-    }
-    
-    setPasswordError('');
-    return true;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(clearError());
-    
-    if (!validatePasswords()) {
+    setError('');
+
+    if (newPassword !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
       return;
     }
-    
-    if (!token) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Token inválido o faltante',
-      });
-      return;
-    }
-    
+
     try {
-      await dispatch(resetPassword({ token, password })).unwrap();
-      toast({
-        title: 'Contraseña actualizada',
-        description: 'Tu contraseña ha sido restablecida exitosamente',
-      });
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Error al restablecer la contraseña',
-      });
+      await dispatch(resetPassword({ oobCode, newPassword })).unwrap();
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.message || 'Error al restablecer la contraseña');
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card>
       <CardHeader>
         <CardTitle>Restablecer Contraseña</CardTitle>
         <CardDescription>
-          Crea una nueva contraseña para tu cuenta.
+          Ingresa tu nueva contraseña
         </CardDescription>
       </CardHeader>
-      
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          
-          {resetPasswordSuccess && (
-            <Alert>
-              <AlertDescription>
-                Tu contraseña ha sido restablecida exitosamente. Serás redirigido a la página de inicio de sesión en unos segundos.
-              </AlertDescription>
-            </Alert>
-          )}
-          
-          <div className="space-y-2">
-            <Label htmlFor="password">Nueva Contraseña</Label>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+              Nueva Contraseña
+            </label>
             <Input
-              id="password"
+              id="newPassword"
               type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               required
-              disabled={loading || resetPasswordSuccess}
+              className="mt-1"
             />
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              Confirmar Contraseña
+            </label>
             <Input
               id="confirmPassword"
               type="password"
-              placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              disabled={loading || resetPasswordSuccess}
+              className="mt-1"
             />
-            {passwordError && (
-              <p className="text-sm text-red-500 mt-1">{passwordError}</p>
-            )}
           </div>
-        </CardContent>
-        
-        <CardFooter>
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={loading || resetPasswordSuccess}
-          >
-            {loading ? 'Procesando...' : 'Restablecer Contraseña'}
+          {error && (
+            <div className="text-red-500 text-sm">{error}</div>
+          )}
+          <Button type="submit" className="w-full">
+            Restablecer Contraseña
           </Button>
-        </CardFooter>
-      </form>
+        </form>
+      </CardContent>
+      <CardFooter>
+        <Button variant="link" onClick={() => navigate('/login')} className="w-full">
+          Volver al inicio de sesión
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
