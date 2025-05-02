@@ -40,7 +40,7 @@ export default function ROICalculatorPage() {
     // Calculate potential revenue increase (assuming 10% more efficient diagnostics)
     const timePerDiagnostic = 1; // hour
     const diagnosticsPerMonth = vehicles;
-    const currentRevenue = diagnosticsPerMonth * timePerDiagnostic * laborRate;
+    const currentRevenue = diagnosticsPerMonth * timePerDiagnostic * laborRate * technicians;
     const improvedRevenue = currentRevenue * 1.1; // 10% improvement
     const monthlyRevenue = improvedRevenue - currentRevenue;
 
