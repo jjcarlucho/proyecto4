@@ -1,17 +1,24 @@
 import { 
   signInWithPopup,
-  signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
-  createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword,
-  signOut as firebaseSignOut
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  signOut,
+  User
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // Registrar un nuevo usuario
-export const register = async (userData: { name: string; email: string; password: string }) => {
-  const response = await axios.post(`${API_URL}/auth/register`, userData);
-  return response.data;
+export const register = async (email: string, password: string): Promise<User> => {
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    return result.user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
 
 // Iniciar sesión
@@ -21,19 +28,25 @@ export const login = async (credentials: { email: string; password: string }) =>
 };
 
 // Solicitar restablecimiento de contraseña
-export const forgotPassword = async (email: string) => {
-  const response = await axios.post(`${API_URL}/auth/forgot-password`, { email });
-  return response.data;
+export const forgotPassword = async (email: string): Promise<void> => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
 
 // Restablecer contraseña
-export const resetPassword = async (token: string, password: string) => {
-  const response = await axios.post(`${API_URL}/auth/reset-password`, { token, password });
-  return response.data;
+export const resetPassword = async (oobCode: string, newPassword: string): Promise<void> => {
+  try {
+    await confirmPasswordReset(auth, oobCode, newPassword);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
 
 // Iniciar sesión con Google
-export const loginWithGoogle = async () => {
+export const loginWithGoogle = async (): Promise<User> => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
@@ -42,27 +55,18 @@ export const loginWithGoogle = async () => {
   }
 };
 
-export const loginWithEmailAndPassword = async (email: string, password: string) => {
+export const loginWithEmailAndPassword = async (email: string, password: string): Promise<User> => {
   try {
-    const result = await firebaseSignInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithEmailAndPassword(auth, email, password);
     return result.user;
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
 
-export const registerWithEmailAndPassword = async (email: string, password: string) => {
+export const logout = async (): Promise<void> => {
   try {
-    const result = await firebaseCreateUserWithEmailAndPassword(auth, email, password);
-    return result.user;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
-
-export const logout = async () => {
-  try {
-    await firebaseSignOut(auth);
+    await signOut(auth);
   } catch (error: any) {
     throw new Error(error.message);
   }
