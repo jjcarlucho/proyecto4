@@ -4,19 +4,21 @@ import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
-import DemoPage from './pages/DemoPage';
+import ROICalculatorPage from './pages/ROICalculatorPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import Dashboard from './pages/Dashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from './components/ui/toaster';
 
-// Importar componentes de vehículos
+// Import vehicle components
 import VehicleList from './components/vehicles/VehicleList';
 import VehicleForm from './components/vehicles/VehicleForm';
 import VehicleDetail from './components/vehicles/VehicleDetail';
 
-// Importar componentes de diagnósticos
+// Import diagnostic components
 import DiagnosticList from './components/diagnostics/DiagnosticList';
 import DiagnosticDetail from './components/diagnostics/DiagnosticDetail';
 import StartDiagnostic from './components/diagnostics/StartDiagnostic';
@@ -28,29 +30,31 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
-            {/* Rutas públicas */}
+            {/* Public routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/demo" element={<DemoPage />} />
+            <Route path="/roi-calculator" element={<ROICalculatorPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             
-            {/* Rutas protegidas */}
+            {/* Protected routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             
-            {/* Rutas de vehículos */}
+            {/* Vehicle routes */}
             <Route path="/dashboard/vehicles" element={<ProtectedRoute><VehicleList /></ProtectedRoute>} />
             <Route path="/dashboard/vehicles/new" element={<ProtectedRoute><VehicleForm /></ProtectedRoute>} />
             <Route path="/dashboard/vehicles/edit/:id" element={<ProtectedRoute><VehicleForm /></ProtectedRoute>} />
             <Route path="/dashboard/vehicles/:id" element={<ProtectedRoute><VehicleDetail /></ProtectedRoute>} />
             
-            {/* Rutas de diagnósticos */}
+            {/* Diagnostic routes */}
             <Route path="/dashboard/diagnostics" element={<ProtectedRoute><DiagnosticList /></ProtectedRoute>} />
             <Route path="/dashboard/diagnostics/new" element={<ProtectedRoute><StartDiagnostic /></ProtectedRoute>} />
             <Route path="/dashboard/diagnostics/:id" element={<ProtectedRoute><DiagnosticDetail /></ProtectedRoute>} />
             
-            {/* Ruta por defecto */}
+            {/* Default route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

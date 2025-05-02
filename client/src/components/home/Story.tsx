@@ -7,10 +7,10 @@ const Story: React.FC = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
           <div>
             <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-              Tu vehículo merece lo mejor
+              Your Vehicle Deserves the Best
             </h2>
             <p className="mt-3 max-w-3xl text-lg text-gray-500">
-              AutoDiagnose nació de una idea simple: hacer que el diagnóstico de vehículos sea accesible para todos. Nuestra misión es prevenir problemas antes de que ocurran.
+              AutoDiagnose was born from a simple idea: to make vehicle diagnostics accessible to everyone. Our mission is to prevent problems before they occur.
             </p>
             <div className="mt-8 space-y-6">
               <div className="flex">
@@ -22,9 +22,9 @@ const Story: React.FC = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Diagnóstico preciso</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Precise Diagnostics</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Utilizamos algoritmos de IA entrenados con millones de datos de vehículos para identificar problemas con precisión.
+                    We use AI algorithms trained on millions of vehicle data points to identify problems with precision.
                   </p>
                 </div>
               </div>
@@ -38,9 +38,9 @@ const Story: React.FC = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Ahorro de tiempo y dinero</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Save Time and Money</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Evita costosas reparaciones detectando problemas a tiempo y recibiendo recomendaciones específicas.
+                    Avoid costly repairs by detecting problems early and receiving specific recommendations.
                   </p>
                 </div>
               </div>
@@ -54,9 +54,9 @@ const Story: React.FC = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Facilidad de uso</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Ease of Use</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Interfaz intuitiva diseñada para ser utilizada por cualquier persona, sin necesidad de conocimientos técnicos.
+                    Intuitive interface designed to be used by anyone, without the need for technical knowledge.
                   </p>
                 </div>
               </div>
@@ -69,7 +69,7 @@ const Story: React.FC = () => {
                 className="relative mx-auto w-full rounded-lg" 
                 width="490" 
                 src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
-                alt="Mecánico trabajando en un automóvil" 
+                alt="Mechanic working on a car" 
               />
             </div>
           </div>

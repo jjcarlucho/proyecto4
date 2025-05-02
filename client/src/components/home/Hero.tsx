@@ -13,17 +13,17 @@ const Hero: React.FC = () => {
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1>
                 <span className="block text-sm font-semibold uppercase tracking-wide text-gray-300 sm:text-base lg:text-sm xl:text-base">
-                  Diagnóstico Inteligente
+                  Intelligent Diagnostics
                 </span>
                 <span className="mt-1 block text-4xl tracking-tight font-extrabold text-white sm:text-5xl xl:text-6xl">
                   <span className="block">AutoDiagnose AI</span>
-                  <span className="block text-blue-200">Tu mecánico inteligente</span>
+                  <span className="block text-blue-200">Your Intelligent Mechanic</span>
                 </span>
               </h1>
               <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Diagnóstico automático de vehículos impulsado por inteligencia artificial. 
-                Detecta problemas antes de que se conviertan en averías graves 
-                y recibe recomendaciones precisas para mantener tu vehículo en óptimas condiciones.
+                Automatic vehicle diagnostics powered by artificial intelligence. 
+                Detect problems before they become serious breakdowns
+                and receive precise recommendations to keep your vehicle in optimal condition.
               </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
@@ -32,15 +32,15 @@ const Hero: React.FC = () => {
                       to="/register"
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
                     >
-                      Comenzar Gratis
+                      Get Started
                     </Link>
                   </div>
                   <div className="mt-3 sm:mt-0 sm:ml-3">
                     <Link
-                      to="/demo"
+                      to="/features"
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10"
                     >
-                      Ver Demo
+                      Learn More
                     </Link>
                   </div>
                 </div>
@@ -52,14 +52,14 @@ const Hero: React.FC = () => {
                   <img
                     className="w-full"
                     src="https://images.unsplash.com/photo-1563902452538-c93a2b7c0794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"
-                    alt="Diagnóstico de automóvil"
+                    alt="Car diagnostic"
                   />
                   <div className="absolute inset-0 w-full h-full flex items-center justify-center">
                     <div className="bg-white bg-opacity-75 rounded-lg px-4 py-3">
                       <svg className="h-10 w-10 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
                       </svg>
-                      <span className="block text-sm font-medium text-gray-900">Ver cómo funciona</span>
+                      <span className="block text-sm font-medium text-gray-900">See how it works</span>
                     </div>
                   </div>
                 </div>

@@ -2,26 +2,26 @@ import React from 'react';
 
 const testimonials = [
   {
-    content: "AutoDiagnose ha sido una herramienta indispensable para mi taller. Nos ha permitido diagnosticar problemas de manera rápida y precisa, ahorrando tiempo y recursos.",
+    content: "AutoDiagnose has been an indispensable tool for my workshop. It has allowed us to diagnose problems quickly and accurately, saving time and resources.",
     author: {
-      name: "Carlos Rodríguez",
-      role: "Propietario de Taller Mecánico",
+      name: "Carlos Rodriguez",
+      role: "Auto Shop Owner",
       imageUrl: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
     },
   },
   {
-    content: "Como propietaria de un auto antiguo, siempre me preocupaba no saber qué estaba fallando. Con AutoDiagnose puedo identificar problemas antes de que empeoren, ¡ha sido un salvavidas!",
+    content: "As the owner of an older car, I was always worried about not knowing what was failing. With AutoDiagnose I can identify problems before they get worse, it's been a lifesaver!",
     author: {
-      name: "María González",
-      role: "Conductor Particular",
+      name: "Maria Gonzalez",
+      role: "Private Driver",
       imageUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
     },
   },
   {
-    content: "Manejo una flota de vehículos para mi empresa y AutoDiagnose nos ha ayudado a reducir los costos de mantenimiento en un 30%. La anticipación de problemas es clave en nuestro negocio.",
+    content: "I manage a fleet of vehicles for my company and AutoDiagnose has helped us reduce maintenance costs by 30%. Problem anticipation is key in our business.",
     author: {
-      name: "Javier Méndez",
-      role: "Gerente de Logística",
+      name: "Javier Mendez",
+      role: "Logistics Manager",
       imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80",
     },
   },
@@ -33,10 +33,10 @@ const Testimonials: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Lo que nuestros clientes dicen
+            What Our Customers Say
           </h2>
           <p className="mt-4 text-lg text-gray-500">
-            Descubre cómo AutoDiagnose ha transformado la manera en que personas y empresas cuidan sus vehículos.
+            Discover how AutoDiagnose has transformed the way people and businesses take care of their vehicles.
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">

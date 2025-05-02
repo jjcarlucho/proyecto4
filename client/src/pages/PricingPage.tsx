@@ -4,54 +4,54 @@ import { Check } from 'lucide-react';
 
 const tiers = [
   {
-    name: 'Básico',
-    price: '9.99',
-    description: 'Todo lo que necesitas para mantener tu vehículo en buen estado.',
+    name: 'Basic',
+    price: '19.99',
+    description: 'Essential diagnostics for your personal vehicle.',
     features: [
-      'Diagnóstico básico de vehículos',
-      'Alertas de mantenimiento',
-      'Registro de 1 vehículo',
-      'Historial de diagnósticos',
-      'Soporte por email',
+      '3 diagnostics per month',
+      'Basic maintenance alerts',
+      'Register 1 vehicle',
+      'Diagnostic history',
+      'Email support',
     ],
-    cta: 'Comenzar gratis',
+    cta: 'Get Started',
     mostPopular: false,
   },
   {
-    name: 'Premium',
-    price: '19.99',
-    description: 'Para conductores que quieren el mejor cuidado para sus vehículos.',
+    name: 'Standard',
+    price: '59.99',
+    description: 'Comprehensive diagnostics for multiple vehicles.',
     features: [
-      'Diagnóstico avanzado de vehículos',
-      'Alertas en tiempo real',
-      'Registro de hasta 3 vehículos',
-      'Historial detallado',
-      'Recomendaciones personalizadas',
-      'Soporte prioritario',
+      '15 diagnostics per month',
+      'Real-time alerts',
+      'Register up to 3 vehicles',
+      'Detailed diagnostic history',
+      'Personalized recommendations',
+      'Priority support',
     ],
-    cta: 'Comenzar gratis',
+    cta: 'Get Started',
     mostPopular: true,
   },
   {
-    name: 'Empresarial',
-    price: '49.99',
-    description: 'Para flotas de vehículos y negocios.',
+    name: 'Premium',
+    price: '99.99',
+    description: 'Unlimited diagnostics for serious vehicle owners.',
     features: [
-      'Diagnóstico para flotas',
-      'Registro ilimitado de vehículos',
-      'Panel de administración',
-      'Reportes avanzados',
-      'API de integración',
-      'Soporte técnico 24/7',
+      'Unlimited diagnostics',
+      'Advanced vehicle monitoring',
+      'Unlimited vehicle registration',
+      'Advanced reports',
+      'API integration',
+      '24/7 technical support',
     ],
-    cta: 'Contactar ventas',
+    cta: 'Early Access Pricing',
     mostPopular: false,
   },
 ];
 
 const PricingPage: React.FC = () => {
   useEffect(() => {
-    document.title = 'Precios - AutoDiagnose AI';
+    document.title = 'Pricing - AutoDiagnose AI';
   }, []);
 
   return (
@@ -60,10 +60,10 @@ const PricingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
-              Planes y Precios
+              Plans and Pricing
             </h1>
             <p className="mt-5 max-w-xl mx-auto text-xl text-blue-100">
-              Elige el plan que mejor se adapte a tus necesidades y comienza a cuidar tu vehículo hoy mismo.
+              Choose the plan that best fits your needs and start taking care of your vehicle today.
             </p>
           </div>
         </div>
@@ -72,13 +72,13 @@ const PricingPage: React.FC = () => {
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Precios</h2>
+            <h2 className="text-base font-semibold leading-7 text-blue-600">Pricing</h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-              Planes para todos los conductores
+              Plans for Every Driver
             </p>
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-            Todos nuestros planes incluyen una prueba gratuita de 14 días. Sin compromisos, puedes cancelar en cualquier momento.
+            Premium diagnostics for your vehicle. Subscribe now to start protecting your investment.
           </p>
           <div className="mt-16 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-3 lg:gap-x-8">
             {tiers.map((tier) => (
@@ -93,7 +93,7 @@ const PricingPage: React.FC = () => {
                 {tier.mostPopular && (
                   <div className="mb-6">
                     <span className="inline-flex rounded-full bg-blue-600/10 px-3 py-1 text-sm font-semibold leading-6 text-blue-600 ring-1 ring-inset ring-blue-600/10">
-                      Más popular
+                      Most popular
                     </span>
                   </div>
                 )}
@@ -102,7 +102,7 @@ const PricingPage: React.FC = () => {
                     ${tier.price}
                   </span>
                   <span className="text-sm font-semibold leading-6 text-gray-600">
-                    /mes
+                    /month
                   </span>
                 </div>
                 <h3 className="mt-3 text-2xl font-bold tracking-tight text-gray-900">
@@ -120,7 +120,7 @@ const PricingPage: React.FC = () => {
                   ))}
                 </ul>
                 <Link
-                  to={tier.name === 'Empresarial' ? '/contacto' : '/register'}
+                  to="/register"
                   className={`mt-8 block w-full rounded-md py-3 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
                     ${
                       tier.mostPopular
@@ -140,26 +140,26 @@ const PricingPage: React.FC = () => {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Preguntas frecuentes
+              Frequently Asked Questions
             </h2>
           </div>
           <div className="mt-12 space-y-8">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900">¿Cómo funciona la prueba gratuita?</h3>
+              <h3 className="text-lg font-medium text-gray-900">How do your subscription plans work?</h3>
               <p className="mt-2 text-base text-gray-500">
-                Todos nuestros planes incluyen una prueba gratuita de 14 días. No necesitas proporcionar información de pago para comenzar. Puedes cancelar en cualquier momento antes de que finalice la prueba.
+                Our subscription plans are billed monthly. You will need to provide payment information to begin. You can cancel your subscription at any time from your account dashboard.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900">¿Puedo cambiar de plan?</h3>
+              <h3 className="text-lg font-medium text-gray-900">Can I change my plan?</h3>
               <p className="mt-2 text-base text-gray-500">
-                Sí, puedes actualizar o cambiar tu plan en cualquier momento. Los cambios se aplican inmediatamente y ajustamos el costo de forma proporcional.
+                Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately and we'll adjust the cost proportionally for the remainder of your billing period.
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900">¿Qué métodos de pago aceptan?</h3>
+              <h3 className="text-lg font-medium text-gray-900">What payment methods do you accept?</h3>
               <p className="mt-2 text-base text-gray-500">
-                Aceptamos todas las tarjetas de crédito principales (Visa, Mastercard, American Express), PayPal y transferencias bancarias para planes empresariales.
+                We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for our premium plans.
               </p>
             </div>
           </div>

@@ -9,39 +9,39 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">AutoDiagnose AI</h3>
             <p className="text-gray-300 text-sm">
-              Diagnóstico automático de vehículos con inteligencia artificial. Descubre problemas en tu vehículo antes de que se conviertan en averías graves.
+              Automatic vehicle diagnostics with artificial intelligence. Discover problems in your vehicle before they turn into serious breakdowns.
             </p>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors">Inicio</Link>
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/features" className="text-gray-300 hover:text-white transition-colors">Funcionalidades</Link>
+                <Link to="/features" className="text-gray-300 hover:text-white transition-colors">Features</Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-gray-300 hover:text-white transition-colors">Precios</Link>
+                <Link to="/pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</Link>
               </li>
               <li>
-                <Link to="/demo" className="text-gray-300 hover:text-white transition-colors">Demo</Link>
+                <Link to="/roi-calculator" className="text-gray-300 hover:text-white transition-colors">ROI Calculator</Link>
               </li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Soporte</h3>
+            <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="mailto:soporte@autodiagnose.com" className="text-gray-300 hover:text-white transition-colors">soporte@autodiagnose.com</a>
+                <a href="mailto:support@autodiagnose.com" className="text-gray-300 hover:text-white transition-colors">support@autodiagnose.com</a>
               </li>
               <li>
-                <span className="text-gray-300">Teléfono: +1 555 123 4567</span>
+                <span className="text-gray-300">Phone: +1 555 123 4567</span>
               </li>
               <li>
-                <span className="text-gray-300">Lunes a Viernes: 9:00 - 18:00</span>
+                <span className="text-gray-300">Monday to Friday: 9:00 AM - 6:00 PM</span>
               </li>
             </ul>
           </div>
@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} AutoDiagnose AI. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} AutoDiagnose AI. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a href="#" className="text-gray-400 hover:text-white transition-colors">
